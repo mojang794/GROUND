@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace engine
+namespace gr
 {
     class Joypad
     {

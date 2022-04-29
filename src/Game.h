@@ -10,8 +10,8 @@
 
 struct GameData
 {
-	Manager manager;
-	engine::StateMachine machine;
+	gr::Manager manager;
+	gr::StateMachine machine;
 	sf::Window window;
 	std::map<std::string, int> supported_keys;
 	std::map<std::string, int> graphics_settings;

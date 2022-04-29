@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <string>
 
-namespace engine
+namespace gr
 {
     bool loadOBJ(
         const char *path,

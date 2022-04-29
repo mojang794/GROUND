@@ -4,13 +4,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-engine::Texture::Texture()
+gr::base::Texture::Texture()
 {
 	glGenTextures(1, &ID);
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void engine::Texture::Load(const char* path)
+void gr::base::Texture::Load(const char* path)
 {
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
@@ -26,27 +26,27 @@ void engine::Texture::Load(const char* path)
 	stbi_image_free(data);
 }
 
-void engine::Texture::setTexParameteri(unsigned int target, unsigned int option, unsigned int param)
+void gr::base::Texture::setTexParameteri(unsigned int target, unsigned int option, unsigned int param)
 {
 	glTexParameteri(target, option, param);
 }
 
-void engine::Texture::Activate(unsigned int TEXTURE)
+void gr::base::Texture::Activate(unsigned int TEXTURE)
 {
 	glActiveTexture(TEXTURE);
 }
 
-void engine::Texture::Bind()
+void gr::base::Texture::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void engine::Texture::UnBind()
+void gr::base::Texture::UnBind()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void engine::Texture::Delete()
+void gr::base::Texture::Delete()
 {
 	glDeleteTextures(1, &ID);
 }

@@ -1,6 +1,6 @@
 #include "Music.h"
 
-namespace engine
+namespace gr
 {
     Music::Music(std::string filepath)
     {

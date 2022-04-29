@@ -2,7 +2,7 @@
 
 #include <SFML/Audio.hpp>
 
-namespace engine
+namespace gr
 {
     class Music
     {

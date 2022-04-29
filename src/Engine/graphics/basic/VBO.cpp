@@ -1,24 +1,24 @@
 #include "VBO.h"
 #include <glad/glad.h>
 
-engine::VBO::VBO(int size, const void* data)
+gr::base::VBO::VBO(int size, const void* data)
 {
 	glGenBuffers(1, &ID);
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
-void engine::VBO::Bind()
+void gr::base::VBO::Bind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
 }
 
-void engine::VBO::UnBind()
+void gr::base::VBO::UnBind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void engine::VBO::Delete()
+void gr::base::VBO::Delete()
 {
 	glDeleteBuffers(1, &ID);
 }

@@ -6,7 +6,7 @@
 
 static std ::vector<std ::string> g_supportExtensions;
 
-namespace engine
+namespace gr
 {
     bool loadOBJ(
         const char *path,

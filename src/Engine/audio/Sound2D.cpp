@@ -1,7 +1,6 @@
 #include "Sound2D.h"
 
-
-namespace engine
+namespace gr
 {
     Sound2D::Sound2D(std::string filepath)
     {

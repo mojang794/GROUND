@@ -4,32 +4,35 @@
 #include "TransformComponent.h"
 #include "../graphics/Shader.h"
 
-enum Basic2DGeometryShapes
-{
-    TRIANGLE,
-    SQUARE
-};
+namespace gr {
 
-class Basic2DGeometry : public Component
-{
-private:
-    glm::mat4 model;
-    TransformComponent *transform;
-    unsigned int VAO, VBO;
-    engine::Shader *shader;
-    Basic2DGeometryShapes types;
-    glm::vec3 color;
+    enum Basic2DGeometryShapes
+    {
+        TRIANGLE,
+        SQUARE
+    };
 
-public:
-    Basic2DGeometry(Basic2DGeometryShapes s, std::string Fshader, std::string Vshader);
+    class Basic2DGeometry : public Component
+    {
+    private:
+        glm::mat4 model;
+        TransformComponent *transform;
+        unsigned int VAO, VBO;
+        Shader *shader;
+        Basic2DGeometryShapes types;
+        glm::vec3 color;
 
-    unsigned int GetBuffer() const;
-    void SetColor(glm::vec3 c);
+    public:
+        Basic2DGeometry(Basic2DGeometryShapes s, std::string Fshader, std::string Vshader);
 
-    engine::Shader* GetShader();
+        unsigned int GetBuffer() const;
+        void SetColor(glm::vec3 c);
 
-    void init() override;
-    void update(float dt) override;
-    void draw() override;
-    void destroyGL() override;
-};
+        Shader* GetShader();
+
+        void init() override;
+        void update(float dt) override;
+        void draw() override;
+        void destroyGL() override;
+    };
+}

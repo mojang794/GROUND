@@ -10,7 +10,7 @@
 class Player
 {
 public:
-    Player(std::map<std::string, int> keys, Manager* m);
+    Player(std::map<std::string, int> keys, gr::Manager* m);
     ~Player();
 
     void init();
@@ -20,14 +20,15 @@ public:
     glm::mat4 GetProjection(float w, float y) const;
     glm::mat4 GetView() const;
     glm::vec3 GetFront() const;
-    TransformComponent* GetTransform() const;
+    gr::TransformComponent* GetTransform() const;
 
     glm::vec3 lightColor;
 
 private:
-    engine::Camera* camera;
-    engine::Joypad joypad;
+    gr::Camera* camera;
+    gr::Joypad joypad;
     std::map<std::string, int> _keys;
-    Entity* ui;
+    gr::Entity* ui;
     glm::vec3 _objectColor;
+    gr::TransformComponent* p_transform;
 };

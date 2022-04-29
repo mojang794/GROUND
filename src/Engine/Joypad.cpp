@@ -1,6 +1,6 @@
 #include "Joypad.hpp"
 
-using namespace engine;
+using namespace gr;
 
 Joypad::Joypad()
     : _joypadNum(0)

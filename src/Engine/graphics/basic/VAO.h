@@ -1,21 +1,23 @@
 #pragma once
 
 
-namespace engine
+namespace gr
 {
-	class VAO
-	{
-	public: unsigned int ID;
+	namespace base {
+		class VAO
+		{
+		public: unsigned int ID;
 
-	public:
-		VAO();
+		public:
+			VAO();
 
-		void LinkAttribute(unsigned int index, int size, unsigned int type, int normalized, int stride, const void* pointer);
+			void LinkAttribute(unsigned int index, int size, unsigned int type, int normalized, int stride, const void* pointer);
 
-		void Bind();
-		void UnBind();
-		
-		void Delete();
-	};
+			void Bind();
+			void UnBind();
+			
+			void Delete();
+		};
+	}
 }
 

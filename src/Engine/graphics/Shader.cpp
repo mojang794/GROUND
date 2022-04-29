@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include <glad/glad.h>
 
-bool engine::Shader::isPredefinedUsed = false;
-unsigned int engine::Shader::PredefinedID;
+bool gr::Shader::isPredefinedUsed = false;
+unsigned int gr::Shader::PredefinedID;
 
-void engine::Shader::CompilePredefinedShader(const char* filePath)
+void gr::Shader::CompilePredefinedShader(const char* filePath)
 {
     if (!isPredefinedUsed)
     {
@@ -44,26 +44,26 @@ void engine::Shader::CompilePredefinedShader(const char* filePath)
                     << infoLog << std::endl;
         };
 
-        printf("[ENGINE] PREDEFINED SHADER TOOLS: TRUE\n");
+        printf("[gr] PREDEFINED SHADER TOOLS: TRUE\n");
     }
 }
 
-void engine::Shader::DeletePredefinedShader()
+void gr::Shader::DeletePredefinedShader()
 {
     glDeleteShader(PredefinedID);
 }
 
-engine::Shader::Shader(const char* vertexPath, const char* fragmentPath)
+gr::Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
     LoadFromFile(vertexPath, fragmentPath);
 }
 
-engine::Shader::Shader(std::string VertexStream, std::string FragmentStream)
+gr::Shader::Shader(std::string VertexStream, std::string FragmentStream)
 {
     LoadFromStream(VertexStream.c_str(), FragmentStream.c_str());
 }
 
-void engine::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
+void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
 {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
@@ -148,7 +148,7 @@ void engine::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPa
     glDeleteShader(fragment);
 }
 
-void engine::Shader::LoadFromStream(const char *VertexStream, const char *FragmentStream)
+void gr::Shader::LoadFromStream(const char *VertexStream, const char *FragmentStream)
 {
     const char *vShaderCode = VertexStream;
     const char *fShaderCode = FragmentStream;
@@ -203,70 +203,70 @@ void engine::Shader::LoadFromStream(const char *VertexStream, const char *Fragme
     glDeleteShader(fragment);
 }
 
-void engine::Shader::use()
+void gr::Shader::use()
 {
     glUseProgram(ID);
 }
 
-void engine::Shader::Delete()
+void gr::Shader::Delete()
 {
     glDeleteProgram(ID);
 }
 
-void engine::Shader::setBool(const std::string &name, bool value) const
+void gr::Shader::setBool(const std::string &name, bool value) const
 {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 
-void engine::Shader::setInt(const std::string &name, int value) const
+void gr::Shader::setInt(const std::string &name, int value) const
 {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void engine::Shader::setFloat(const std::string &name, float value) const
+void gr::Shader::setFloat(const std::string &name, float value) const
 {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
 // ------------------------------------------------------------------------
-void engine::Shader::setVec2(const std::string &name, const glm::vec2 &value) const
+void gr::Shader::setVec2(const std::string &name, const glm::vec2 &value) const
 {
     glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void engine::Shader::setVec2(const std::string &name, float x, float y) const
+void gr::Shader::setVec2(const std::string &name, float x, float y) const
 {
     glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
 }
 // ------------------------------------------------------------------------
-void engine::Shader::setVec3(const std::string &name, const glm::vec3 &value) const
+void gr::Shader::setVec3(const std::string &name, const glm::vec3 &value) const
 {
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void engine::Shader::setVec3(const std::string &name, float x, float y, float z) const
+void gr::Shader::setVec3(const std::string &name, float x, float y, float z) const
 {
     glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
 }
 // ------------------------------------------------------------------------
-void engine::Shader::setVec4(const std::string &name, const glm::vec4 &value) const
+void gr::Shader::setVec4(const std::string &name, const glm::vec4 &value) const
 {
     glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
 }
-void engine::Shader::setVec4(const std::string &name, float x, float y, float z, float w)
+void gr::Shader::setVec4(const std::string &name, float x, float y, float z, float w)
 {
     glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
 }
 // ------------------------------------------------------------------------
-void engine::Shader::setMat2(const std::string &name, const glm::mat2 &mat) const
+void gr::Shader::setMat2(const std::string &name, const glm::mat2 &mat) const
 {
     glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 // ------------------------------------------------------------------------
-void engine::Shader::setMat3(const std::string &name, const glm::mat3 &mat) const
+void gr::Shader::setMat3(const std::string &name, const glm::mat3 &mat) const
 {
     glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 // ------------------------------------------------------------------------
-void engine::Shader::setMat4(const std::string &name, const glm::mat4 &mat) const
+void gr::Shader::setMat4(const std::string &name, const glm::mat4 &mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }

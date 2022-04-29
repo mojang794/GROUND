@@ -1,21 +1,23 @@
 #pragma once
 
-namespace engine
+namespace gr
 {
-	class Texture
-	{
-	public: unsigned int ID;
+	namespace base {
+		class Texture
+		{
+		public: unsigned int ID;
 
-	public:
-		Texture();
+		public:
+			Texture();
 
-		void Load(const char* path);
-		void setTexParameteri(unsigned int target, unsigned int option, unsigned int param);
-		void Activate(unsigned int TEXTURE);
+			void Load(const char* path);
+			void setTexParameteri(unsigned int target, unsigned int option, unsigned int param);
+			void Activate(unsigned int TEXTURE);
 
-		void Bind();
-		void UnBind();
-		void Delete();
-	};
+			void Bind();
+			void UnBind();
+			void Delete();
+		};
+	}
 }
 

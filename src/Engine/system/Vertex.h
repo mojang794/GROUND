@@ -3,10 +3,13 @@
 #include <glm/glm.hpp>
 #include "Color.h"
 
-struct Vertex
+namespace gr
 {
-	glm::vec3 position;
-	glm::vec3 color;
-	glm::vec2 texCoords;
-	glm::vec3 normal;
-};
+	struct Vertex
+	{
+		glm::vec3 position;
+		glm::vec3 color;
+		glm::vec2 texCoords;
+		glm::vec3 normal;
+	};
+}

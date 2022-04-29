@@ -6,11 +6,11 @@
 #include "Engine/ECS.h"
 #include "Player.h"
 
-class GameState : public engine::States
+class GameState : public gr::States
 {
 private:
 	GameDataRef _data;
-	Entity* test;
+	gr::Entity* test;
 	Player* player;
 
 public:

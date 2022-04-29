@@ -1,17 +1,19 @@
 #pragma once
 
-namespace engine
+namespace gr
 {
-	class VBO
-	{
-	public: unsigned int ID;
+	namespace base {
+		class VBO
+		{
+		public: unsigned int ID;
 
-	public:
-		VBO(int size, const void* data);
+		public:
+			VBO(int size, const void* data);
 
-		void Bind();
-		void UnBind();
-		void Delete();
-	};
+			void Bind();
+			void UnBind();
+			void Delete();
+		};
+	}
 }
 

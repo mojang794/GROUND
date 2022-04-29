@@ -1,28 +1,28 @@
 #include "VAO.h"
 #include <glad/glad.h>
 
-engine::VAO::VAO()
+gr::base::VAO::VAO()
 {
 	glGenVertexArrays(1, &ID);
 }
 
-void engine::VAO::LinkAttribute(unsigned int index, int size, unsigned int type, int normalized, int stride, const void* pointer)
+void gr::base::VAO::LinkAttribute(unsigned int index, int size, unsigned int type, int normalized, int stride, const void* pointer)
 {
 	glVertexAttribPointer(index, size, type, false, stride, pointer);
 	glEnableVertexAttribArray(index);
 }
 
-void engine::VAO::Bind()
+void gr::base::VAO::Bind()
 {
 	glBindVertexArray(ID);
 }
 
-void engine::VAO::UnBind()
+void gr::base::VAO::UnBind()
 {
 	glBindVertexArray(0);
 }
 
-void engine::VAO::Delete()
+void gr::base::VAO::Delete()
 {
 	glDeleteVertexArrays(1, &ID);
 }

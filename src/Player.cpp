@@ -2,7 +2,7 @@
 #include "Engine/Components.h"
 #include <SFML/Window.hpp>
 
-Player::Player(std::map<std::string, int> keys, Manager *m)
+Player::Player(std::map<std::string, int> keys, gr::Manager *m)
     : _keys(keys)
 {
     this->ui = &m->addEntity();
@@ -12,36 +12,40 @@ Player::~Player()
 {
     delete this->camera;
     delete this->ui;
+    delete this->p_transform;
 }
 
 void Player::init()
 {
-    camera = new engine::Camera(glm::vec3(0, 0, 3.f));
+    camera = new gr::Camera(glm::vec3(0, 0, 3.f));
     this->lightColor = glm::vec3(1.0);
     this->_objectColor = glm::vec3(1.0f, 0.0f, 0.0f);
 
-    this->ui->addComponent<TransformComponent>(0.0f, -0.9f, 0.0f, glm::vec3(0.1f));
-    this->ui->addComponent<Basic2DGeometry>(Basic2DGeometryShapes::SQUARE, "Core/Shading/PlayerUI.frag", "Core/Shading/PlayerUI.vert");
-    this->ui->getComponent<Basic2DGeometry>().SetColor(_objectColor);
+    this->ui->addComponent<gr::TransformComponent>(0.0f, -0.9f, 0.0f, glm::vec3(0.1f));
+    this->ui->addComponent<gr::Basic2DGeometry>(gr::Basic2DGeometryShapes::SQUARE, "Core/Shading/PlayerUI.frag", "Core/Shading/PlayerUI.vert");
+    this->ui->getComponent<gr::Basic2DGeometry>().SetColor(_objectColor);
+    p_transform = new gr::TransformComponent(camera->Position.x, camera->Position.y, camera->Position.z, glm::vec3(0.5, 1.0, 0.5));
 }
 
 void Player::update(float deltaTime)
 {
+    p_transform->position = camera->Position;
+    
     if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("W"))))
     {
-        camera->ProcessKeyboard(engine::FORWARD, 5 * deltaTime);
+        camera->ProcessKeyboard(gr::FORWARD, 5 * deltaTime);
     }
     if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("S"))))
     {
-        camera->ProcessKeyboard(engine::BACKWARD, 5 * deltaTime);
+        camera->ProcessKeyboard(gr::BACKWARD, 5 * deltaTime);
     }
     if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("A"))))
     {
-        camera->ProcessKeyboard(engine::LEFT, 5 * deltaTime);
+        camera->ProcessKeyboard(gr::LEFT, 5 * deltaTime);
     }
     if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("D"))))
     {
-        camera->ProcessKeyboard(engine::RIGHT, 5 * deltaTime);
+        camera->ProcessKeyboard(gr::RIGHT, 5 * deltaTime);
     }
 
     if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("LEFT_ARROW"))))
@@ -54,19 +58,19 @@ void Player::update(float deltaTime)
         /**********************************************************************************************************/
         if (joypad.isAxisMinorTo(sf::Joystick::Axis::Y, -50))
         {
-            camera->ProcessKeyboard(engine::FORWARD, 5 * deltaTime);
+            camera->ProcessKeyboard(gr::FORWARD, 5 * deltaTime);
         }
         if (joypad.isAxisGreaterTo(sf::Joystick::Axis::Y, 50))
         {
-            camera->ProcessKeyboard(engine::BACKWARD, 5 * deltaTime);
+            camera->ProcessKeyboard(gr::BACKWARD, 5 * deltaTime);
         }
         if (joypad.isAxisMinorTo(sf::Joystick::Axis::X, -50))
         {
-            camera->ProcessKeyboard(engine::LEFT, 5 * deltaTime);
+            camera->ProcessKeyboard(gr::LEFT, 5 * deltaTime);
         }
         if (joypad.isAxisGreaterTo(sf::Joystick::Axis::X, 50))
         {
-            camera->ProcessKeyboard(engine::RIGHT, 5 * deltaTime);
+            camera->ProcessKeyboard(gr::RIGHT, 5 * deltaTime);
         }
 
         if (joypad.isAxisMinorTo(sf::Joystick::Axis::U, -50))
@@ -86,19 +90,19 @@ void Player::UpdateDraw()
     if (joypad.ifConnected(0))
     {
         /**********************************************************************************************************/
-        if (joypad.buttonPress(engine::Joypad::JoypadButtons::A))
+        if (joypad.buttonPress(gr::Joypad::JoypadButtons::A))
         {
             this->lightColor = glm::vec3(1.0);
             this->_objectColor = glm::vec3(1.0f, 0.0f, 0.0f);
         }
-        if (joypad.buttonPress(engine::Joypad::JoypadButtons::B))
+        if (joypad.buttonPress(gr::Joypad::JoypadButtons::B))
         {
             this->lightColor = glm::vec3(0.001, 0.001, 0.001);
             this->_objectColor = glm::vec3(0.3, 0.3, 0.3);
         }
         /**********************************************************************************************************/
     }
-    this->ui->getComponent<Basic2DGeometry>().SetColor(_objectColor);
+    this->ui->getComponent<gr::Basic2DGeometry>().SetColor(_objectColor);
 }
 
 glm::mat4 Player::GetProjection(float w, float h) const
@@ -118,7 +122,7 @@ glm::vec3 Player::GetFront() const
     return camera->Front;
 }
 
-TransformComponent *Player::GetTransform() const
+gr::TransformComponent *Player::GetTransform() const
 {
-    return new TransformComponent(camera->Position.x, camera->Position.y, camera->Position.z, glm::vec3(0.5, 1.0, 0.5));
+    return p_transform;
 }

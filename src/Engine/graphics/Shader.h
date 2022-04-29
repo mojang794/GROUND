@@ -6,7 +6,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-namespace engine
+namespace gr
 {
     class Shader
     {

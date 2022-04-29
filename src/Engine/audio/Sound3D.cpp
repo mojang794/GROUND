@@ -1,7 +1,6 @@
 #include "Sound3D.h"
 
-
-namespace engine
+namespace gr
 {
     Sound3D::Sound3D(std::string filepath, float minDistance, float attenuation)
     {

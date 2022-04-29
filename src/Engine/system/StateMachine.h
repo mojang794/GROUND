@@ -5,7 +5,7 @@
 
 #include "States.hpp"
 
-namespace engine
+namespace gr
 {
 
 	typedef std::unique_ptr<States> StatesRef;

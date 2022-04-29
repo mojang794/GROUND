@@ -33,7 +33,7 @@ Game::Game(std::string title)
 			throw "Error! cannot load GLAD!";
 		}
 
-		_data->machine.AddState(engine::StatesRef(new GameState(this->_data)));
+		_data->machine.AddState(gr::StatesRef(new GameState(this->_data)));
 
 		this->run();
 	} catch(std::exception& e) {
@@ -101,7 +101,7 @@ void Game::run()
 		glEnable(GL_DEPTH_TEST);
 
 		// Predefined Shader
-		engine::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
+		gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
 
 
 		while (_data->window.isOpen())
@@ -135,13 +135,11 @@ void Game::run()
 			this->_data->machine.GetActiveState()->AfterDraw();
 			
 			this->_data->window.display();
-			
-
 		}
 
 		this->_data->manager.destroyGL();
 		this->_data->machine.GetActiveState()->destroyGL();
-		engine::Shader::DeletePredefinedShader();
+		gr::Shader::DeletePredefinedShader();
 	} catch(std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 		exit(1);
