@@ -8,6 +8,7 @@
 
 namespace gr
 {
+    // Basic shader class for loading and pass uniforms in shaders
     class Shader
     {
     private:

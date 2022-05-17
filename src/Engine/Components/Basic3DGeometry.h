@@ -15,7 +15,8 @@ namespace gr {
     {
         X,
         Y,
-        Z
+        Z,
+        ALL
     };
 
     class Basic3DGeometry : public Component
@@ -42,7 +43,6 @@ namespace gr {
         void SetLightAttribute(glm::vec3 color, glm::vec3 pos, glm::vec3 camPos, glm::vec3 camFront);
 
         void init() override;
-        void update(float dt) override;
         void draw() override;
         void destroyGL() override;
     };

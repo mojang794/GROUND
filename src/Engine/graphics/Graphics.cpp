@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <stb_image.h>
+#include "../GR_cross_definitions.h"
 
 static std ::vector<std ::string> g_supportExtensions;
 
@@ -14,7 +16,7 @@ namespace gr
         std::vector<glm::vec2> &out_uvs,
         std::vector<glm::vec3> &out_normals)
     {
-        printf("Loading OBJ file %s...\n", path);
+        gr::Log((std::string("Loading model: ").append(path)).c_str());
 
         std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
         std::vector<glm::vec3> temp_vertices;
@@ -24,7 +26,7 @@ namespace gr
         FILE *file = fopen(path, "r");
         if (file == NULL)
         {
-            printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
+            gr::LogError("Impossible to open the file ! Are you in the right path ?");
             getchar();
             return false;
         }
@@ -66,7 +68,7 @@ namespace gr
                 int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
                 if (matches != 9)
                 {
-                    printf("File can't be read by our simple parser :-( Try exporting with other options\n");
+                    gr::LogError("File can't be read by our simple parser :-( Try exporting with other options");
                     fclose(file);
                     return false;
                 }
@@ -108,8 +110,37 @@ namespace gr
             out_normals.push_back(normal);
         }
         fclose(file);
-        printf("Loading finished!\n");
+        gr::Log("Loading finished!");
         return true;
+    }
+
+    unsigned int LoadTexture2D(int width, int height, const char *file)
+    {
+        unsigned int _id;
+        glGenTextures(1, &_id);
+        glBindTexture(GL_TEXTURE_2D, _id);
+
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        int nrChannels;
+        unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            gr::LogError("Failed to load texture");
+        }
+        stbi_image_free(data);
+
+        return _id;
     }
 
     void GetSupportExtensions()

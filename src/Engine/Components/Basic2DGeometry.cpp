@@ -28,7 +28,10 @@ namespace gr {
 
     void Basic2DGeometry::init()
     {
-        transform = &entity->getComponent<TransformComponent>();
+        if (!entity->hasComponent<TransformComponent>()) {
+            entity->addComponent<TransformComponent>();
+        }
+        else { transform = &entity->getComponent<TransformComponent>(); }
 
         glGenVertexArrays(1, &this->VAO);
         glBindVertexArray(this->VAO);
@@ -50,11 +53,6 @@ namespace gr {
         glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aPos"));
         glVertexAttribPointer(glGetAttribLocation(shader->ID, "aColor"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, color));
         glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aColor"));
-    }
-
-    void Basic2DGeometry::update(float dt __attribute__((unused)))
-    {
-        
     }
 
     void Basic2DGeometry::draw()

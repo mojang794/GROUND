@@ -8,3 +8,5 @@
 
 // Core Definitions
 #define PREDEFINED_SHADER   "Core/Shading/PredefinedShader.frag"
+#define LINUX_PATH          "Core/Shading/linux/"
+#define WINDOWS_PATH        "Core/Shading/windows/"

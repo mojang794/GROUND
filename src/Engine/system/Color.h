@@ -3,12 +3,18 @@
 #include <glm/glm.hpp>
 
 namespace gr {
+	/**
+	 * @brief Basic Color class
+	 * 
+	 */
 	class Color
 	{
 	public:
 		float r, g, b;
 
 	public:
+		Color(){}
+
 		Color(float R, float G, float B)
 		{
 			r = R;

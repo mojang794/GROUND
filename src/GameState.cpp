@@ -1,21 +1,22 @@
 #include "GameState.h"
 #include <GL/GL.h>
 #include <Windows.h>
-#include "Engine/utils/Utils.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "Engine/system/Vertex.h"
 #include "Engine/system/Color.h"
 #include "Engine/Components.h"
 #include "Engine/graphics/Shapes.h"
-#include "Engine/Joypad.hpp"
 #include "Engine/system/Collision.h"
+#include "Engine/graphics/Framebuffer.h"
 
 gr::Entity* e;
+gr::Framebuffer* b;
 
 GameState::GameState(GameDataRef data)
     : _data(data)
 {
+    
 }
 
 void GameState::init()
@@ -30,17 +31,22 @@ void GameState::init()
     e = &_data->manager.addEntity();
     e->addComponent<gr::TransformComponent>(10, -2, 10, glm::vec3(0.03f));
     e->addComponent<gr::ModelComponent>("Core/model/SuperComputer.obj", "Core/GFX/SC_texture.bmp", "Core/Shading/modelFrag.frag", "Core/Shading/lightShader.vert", GL_TEXTURE0);
+
+    b = new gr::Framebuffer(_data->window.getSize().x, _data->window.getSize().y, "Core/Shading/Frame.vert", "Core/Shading/Frame.frag");
 }
 
 void GameState::update(float deltaTime)
 {
-
     player->update(deltaTime);
-    gr::Collision::AABB(player->GetTransform(), test);
 }
 
 void GameState::draw()
 {
+    b->Bind();
+    glClearColor(0.3, 0.3, 0.3, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+
     test->getComponent<gr::Basic3DGeometry>().SetProjectionView(
         player->GetProjection(
             _data->window.getSize().x,
@@ -65,6 +71,10 @@ void GameState::draw()
 
 void GameState::AfterDraw()
 {
+    b->UnBind();
+    
+    glDisable(GL_DEPTH_TEST);
+    b->DrawStorage();
 }
 
 void GameState::destroyGL()

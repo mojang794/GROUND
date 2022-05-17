@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glad/glad.h>
+#include "../GR_cross_definitions.h"
 
 bool gr::Shader::isPredefinedUsed = false;
 unsigned int gr::Shader::PredefinedID;
@@ -30,7 +31,9 @@ void gr::Shader::CompilePredefinedShader(const char* filePath)
 
             fShaderCode = fragString.c_str();
         } catch(std::exception& e) {
-            std::cout << "PREDEFINED SHADER -> COMPILATION ERROR:" << std::endl << "ERR: " << e.what() << std::endl;
+            std::string error = "PREDEFINED SHADER -> COMPILATION ERROR: ";
+            error.append(e.what());
+            gr::LogError(error.c_str());
         }
         PredefinedID = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(PredefinedID, 1, &fShaderCode, NULL);
@@ -44,7 +47,7 @@ void gr::Shader::CompilePredefinedShader(const char* filePath)
                     << infoLog << std::endl;
         };
 
-        printf("[gr] PREDEFINED SHADER TOOLS: TRUE\n");
+        gr::Log("PREDEFINED SHADER TOOLS: TRUE");
     }
 }
 

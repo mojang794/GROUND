@@ -5,7 +5,6 @@
 #include <map>
 #include "Engine/system/StateMachine.h"
 #include <SFML/Window.hpp>
-#include <glad/glad.h>
 #include "Engine/ECS.h"
 
 struct GameData
@@ -13,6 +12,7 @@ struct GameData
 	gr::Manager manager;
 	gr::StateMachine machine;
 	sf::Window window;
+	sf::Event event;
 	std::map<std::string, int> supported_keys;
 	std::map<std::string, int> graphics_settings;
 	std::map<std::string, int> audio_settings;

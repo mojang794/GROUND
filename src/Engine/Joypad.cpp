@@ -1,4 +1,4 @@
-#include "Joypad.hpp"
+#include "Joypad.h"
 
 using namespace gr;
 
@@ -23,7 +23,7 @@ bool Joypad::buttonPress(JoypadButtons button) {
     return false;
 }
 
-bool engine::Joypad::isAxisEqualTo(sf::Joystick::Axis axis, float value)
+bool gr::Joypad::isAxisEqualTo(sf::Joystick::Axis axis, float value)
 {
     if (sf::Joystick::getAxisPosition(this->_joypadNum, axis) == value) {
         return true;
@@ -31,7 +31,7 @@ bool engine::Joypad::isAxisEqualTo(sf::Joystick::Axis axis, float value)
     return false;
 }
 
-bool engine::Joypad::isAxisGreaterTo(sf::Joystick::Axis axis, float value)
+bool gr::Joypad::isAxisGreaterTo(sf::Joystick::Axis axis, float value)
 {
     if (sf::Joystick::getAxisPosition(this->_joypadNum, axis) > value) {
         return true;
@@ -39,7 +39,7 @@ bool engine::Joypad::isAxisGreaterTo(sf::Joystick::Axis axis, float value)
     return false;
 }
 
-bool engine::Joypad::isAxisMinorTo(sf::Joystick::Axis axis, float value)
+bool gr::Joypad::isAxisMinorTo(sf::Joystick::Axis axis, float value)
 {
     if (sf::Joystick::getAxisPosition(this->_joypadNum, axis) < value) {
         return true;

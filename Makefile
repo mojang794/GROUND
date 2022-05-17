@@ -6,25 +6,41 @@ SRC		:= src
 INCLUDE	:= include
 LIB		:= lib
 
-LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lopenal32 -lopengl32
-EXECUTABLE	:= GROUND.exe
+ifeq ($(OS),Windows_NT)
+	LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lopenal32 -lopengl32 -luser32 -lkernel32 -municode
+else
+	LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lGL
+endif
+
+EXECUTABLE_R	:= GROUND_release.exe
+EXECUTABLE_D	:= GROUND_debug.exe
 
 EXTERNAL	:= external
 
 ENGINE		:= src/Engine
 ENGINE_G	:= src/Engine/graphics
+ENGINE_GB	:= src/Engine/graphics/base
 ENGINE_A	:= src/Engine/audio
 ENGINE_S	:= src/Engine/system
 ENGINE_C	:= src/Engine/Components
 
-all: $(BIN)/$(EXECUTABLE)
+all: debug
 
-run: clean all
-	clear
-	./$(BIN)/$(EXECUTABLE)
+ifeq ($(OS),Windows_NT)
+release: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+		$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(EXECUTABLE_R) $(LIBRARIES) -D _RELEASE
 
-$(BIN)/$(EXECUTABLE): $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES) -municode
+debug: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(EXECUTABLE_D) $(LIBRARIES)
+# Linux case or any other system:
+#	Install SFML and glew
+else
+release: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+		$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $(BIN)/$(EXECUTABLE_R) $(LIBRARIES) -D _RELEASE
+
+debug: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $(BIN)/$(EXECUTABLE_D) $(LIBRARIES)
+endif
 
 clean:
 	-rm $(BIN)/*

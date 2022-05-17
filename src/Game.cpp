@@ -3,11 +3,12 @@
 #include <iostream>
 #include <sstream>
 #include <ctime>
-#include "Engine/utils/Utils.h"
 #include "Engine/graphics/Graphics.h"
 #include "GameState.h"
 #include "Engine/graphics/Shader.h"
 #include "Definitions.h"
+#include "Engine/system/DeviceInfo.h"
+#include "Engine/GR_cross_definitions.h"
 
 Game::Game(std::string title)
 {
@@ -20,20 +21,27 @@ Game::Game(std::string title)
 		settings.minorVersion = 3;
 		settings.depthBits = 24;
 		settings.stencilBits = 8;
-
 		this->_data->window.create(
-			sf::VideoMode(_data->graphics_settings.at("WIDTH"), _data->graphics_settings.at("HEIGHT")),
-			title, sf::Style::Default, settings
+			(_data->graphics_settings.at("FULLSCREEN") == 0 ? 
+				sf::VideoMode( _data->graphics_settings.at("WIDTH"), _data->graphics_settings.at("HEIGHT")) :
+				sf::VideoMode::getDesktopMode()
+			),
+			title, 
+			(_data->graphics_settings.at("FULLSCREEN") == 0 ? sf::Style::Default : sf::Style::Fullscreen), 
+			settings
 		);
 		this->_data->window.setFramerateLimit(_data->graphics_settings.at("FPS"));
 		this->_data->window.setVerticalSyncEnabled(_data->graphics_settings.at("VSYNC"));
 
-		if (!gladLoadGL()) {
-			std::cout << "Error! cannot load GLAD!" << std::endl;
-			throw "Error! cannot load GLAD!";
-		}
+		gr::InitOpenGL();
 
 		_data->machine.AddState(gr::StatesRef(new GameState(this->_data)));
+
+		std::cout << "DEVICE INFO:" << std::endl
+              << "  -VENDOR: " << gr::GetDeviceInfo(gr::DeviceInfoTypes::VENDOR) << std::endl
+              << "  -VERSION: " << gr::GetDeviceInfo(gr::DeviceInfoTypes::VERSION) << std::endl
+              << "  -GLSL VERSION: " << gr::GetDeviceInfo(gr::DeviceInfoTypes::SHADING_LANGUAGE_VERSION) << std::endl
+              << "  -RENDERER: " << gr::GetDeviceInfo(gr::DeviceInfoTypes::RENDERER) << std::endl;
 
 		this->run();
 	} catch(std::exception& e) {
@@ -103,18 +111,19 @@ void Game::run()
 		// Predefined Shader
 		gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
 
+#if defined(_WIN32) && !defined(_RELEASE)
+		ShowWindow(GetConsoleWindow(), SW_SHOW);
+#endif
 
 		while (_data->window.isOpen())
-		{	
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		{
 
 			this->_data->machine.ProcessChanges();
 			
-			sf::Event ev;
-			while(_data->window.pollEvent(ev))
+			while(_data->window.pollEvent(_data->event))
 			{
-				if (ev.type == sf::Event::Closed) _data->window.close();
-				if (ev.type == sf::Event::Resized) glViewport(0, 0, ev.size.width, ev.size.height);
+				if (_data->event.type == sf::Event::Closed) _data->window.close();
+				if (_data->event.type == sf::Event::Resized) glViewport(0, 0, _data->event.size.width, _data->event.size.height);
 			}
 
 			this->deltatime = this->clock.restart();
@@ -130,8 +139,8 @@ void Game::run()
 				}
 			}
 			
-			this->_data->manager.draw();
 			this->_data->machine.GetActiveState()->draw();
+			this->_data->manager.draw();
 			this->_data->machine.GetActiveState()->AfterDraw();
 			
 			this->_data->window.display();

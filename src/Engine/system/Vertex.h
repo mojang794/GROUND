@@ -5,6 +5,7 @@
 
 namespace gr
 {
+	// basic vertex structure
 	struct Vertex
 	{
 		glm::vec3 position;

@@ -35,7 +35,10 @@ namespace gr {
 
             )END";
 
-        transform = &entity->getComponent<TransformComponent>();
+        if (!entity->hasComponent<TransformComponent>()) {
+            entity->addComponent<TransformComponent>();
+        }
+        else { transform = &entity->getComponent<TransformComponent>(); }
 
         std::string _v = vShader;
         std::string _f = fShader;
@@ -51,11 +54,6 @@ namespace gr {
 
         glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, position));
         glEnableVertexAttribArray(0);
-    }
-
-    void LightSourceComponent::update(float dt __attribute__((unused)))
-    {
-        
     }
 
     void LightSourceComponent::draw()

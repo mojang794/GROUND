@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Camera.h"
-#include "Engine/Joypad.hpp"
+#include "Engine/Joypad.h"
 #include "Engine/ECS.h"
 #include "Engine/Components/TransformComponent.h"
 #include <glm/glm.hpp>

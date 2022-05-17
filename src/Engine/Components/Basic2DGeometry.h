@@ -31,7 +31,6 @@ namespace gr {
         Shader* GetShader();
 
         void init() override;
-        void update(float dt) override;
         void draw() override;
         void destroyGL() override;
     };

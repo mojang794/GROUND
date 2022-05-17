@@ -22,7 +22,6 @@ namespace gr {
         gr::Shader* getShader();
 
         void init() override;
-        void update(float dt) override;
         void draw() override;
         void destroyGL() override;
 

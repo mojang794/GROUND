@@ -34,7 +34,10 @@ namespace gr {
 
     void ModelComponent::init()
     {
-        transform = &entity->getComponent<TransformComponent>();
+        if (!entity->hasComponent<TransformComponent>()) {
+            entity->addComponent<TransformComponent>();
+        }
+        else { transform = &entity->getComponent<TransformComponent>(); }
 
         if (!res) {
             std::cerr << "ERROR! cannot load the 3D model! No source file on directory!" << std::endl;
@@ -92,11 +95,6 @@ namespace gr {
             }
             stbi_image_free(data);
         }
-    }
-
-    void ModelComponent::update(float dt __attribute__((unused)))
-    {
-        
     }
 
     void ModelComponent::draw()

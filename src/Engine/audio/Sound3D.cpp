@@ -1,11 +1,12 @@
 #include "Sound3D.h"
+#include "../GR_cross_definitions.h"
 
 namespace gr
 {
     Sound3D::Sound3D(std::string filepath, float minDistance, float attenuation)
     {
         if (!this->buf.loadFromFile(filepath)) {
-            printf("Error! cannot load '%s'!\n", filepath.c_str());
+            gr::Log((std::string("Cannot load: ").append(filepath)).c_str());
             throw "Error! cannot load '" + filepath + "'!";
         }
 

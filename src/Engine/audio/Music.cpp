@@ -1,11 +1,12 @@
 #include "Music.h"
+#include "../GR_cross_definitions.h"
 
 namespace gr
 {
     Music::Music(std::string filepath)
     {
         if (!this->sound.openFromFile(filepath)) {
-            printf("Error! cannot load '%s'!\n", filepath.c_str());
+            gr::Log((std::string("Cannot load: ").append(filepath)).c_str());
             throw "Error! cannot load '" + filepath + "'!";
         }
     }

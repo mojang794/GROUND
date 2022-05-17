@@ -44,7 +44,10 @@ namespace gr {
 
     void Basic3DGeometry::init()
     {
-        transform = &entity->getComponent<TransformComponent>();
+        if (!entity->hasComponent<TransformComponent>()) {
+            entity->addComponent<TransformComponent>();
+        }
+        else { transform = &entity->getComponent<TransformComponent>(); }
 
         glGenVertexArrays(1, &this->VAO);
         glBindVertexArray(this->VAO);
@@ -70,11 +73,6 @@ namespace gr {
         glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aTexcoord"));
         glVertexAttribPointer(glGetAttribLocation(shader->ID, "aNormal"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, normal));
         glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aNormal"));
-    }
-
-    void Basic3DGeometry::update(float dt __attribute__((unused)))
-    {
-        
     }
 
     void Basic3DGeometry::draw()
@@ -103,7 +101,9 @@ namespace gr {
         case Z:
             model = glm::rotate(model, glm::radians(transform->angle), glm::vec3(0.0f, 0.0f, 1.0f));
             break;
-        
+        case ALL:
+            model = glm::rotate(model, glm::radians(transform->angle), glm::vec3(1.0f, 1.0f, 1.0f));
+            break;
         }
         shader->setMat4("model", model);
 

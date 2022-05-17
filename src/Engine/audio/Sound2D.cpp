@@ -1,11 +1,12 @@
 #include "Sound2D.h"
+#include "../GR_cross_definitions.h"
 
 namespace gr
 {
     Sound2D::Sound2D(std::string filepath)
     {
         if (!this->buf.loadFromFile(filepath)) {
-            printf("Error! cannot load '%s'!\n", filepath.c_str());
+            gr::Log((std::string("Cannot load: ").append(filepath)).c_str());
             throw "Error! cannot load '" + filepath + "'!";
         }
 

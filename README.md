@@ -10,7 +10,7 @@ technically yes, in practice it is an engine I'm working on
 - [x] Shading support
 - [x] Joystick support
 - [ ] Full Audio Support
-- [ ] Basic OpenGL
+- [x] Basic OpenGL
 
 # Engine
 
@@ -30,6 +30,6 @@ technically yes, in practice it is an engine I'm working on
 - VAO class
 - VBO class
 - Texture class
-- FrameBuffer class // Work in progress
+- FrameBuffer class
 ### utils
-- Mathematic/Miscellause header
+- Mathematic/miscellaneous header

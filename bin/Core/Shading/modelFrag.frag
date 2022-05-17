@@ -17,8 +17,5 @@ vec3 DrawPointLight(
 void main()
 {
     vec3 texturePixel = texture(uTexture1, vUV).rgb;
-    if (length(texturePixel) == 0)
-        FragColor = vec4(vUV, 1.0, 1.0) * vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0);
-    else
-        FragColor = vec4(texturePixel, 1.0) * vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0);
+    FragColor = vec4(texturePixel, 1.0) * vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0);
 }
