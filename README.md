@@ -21,15 +21,15 @@ technically yes, in practice it is an engine I'm working on
 ### system
 - Vertex
 - Color
-- Collision
+- Collision // Work in progress...
 - StateMachine
 ### graphics
 - 3D model load function (ONLY OBJ AT THE MOMENT)
-- Predefined shapes //something have to get fixed... but works
+- Predefined shapes
 - Shader class
 - VAO class
 - VBO class
 - Texture class
 - FrameBuffer class
 ### utils
-- Mathematic/miscellaneous header
+- Mathematic/util header
