@@ -1,6 +1,5 @@
 // Define macros that have to be defined only one time
 #define STB_IMAGE_IMPLEMENTATION
-#define STB_TRUETYPE_IMPLEMENTATION
 
 #include <iostream>
 #include <chrono>

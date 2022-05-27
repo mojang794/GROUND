@@ -6,8 +6,7 @@ namespace gr
     Sound3D::Sound3D(std::string filepath, float minDistance, float attenuation)
     {
         if (!this->buf.loadFromFile(filepath)) {
-            gr::Log((std::string("Cannot load: ").append(filepath)).c_str());
-            throw "Error! cannot load '" + filepath + "'!";
+            gr::LogWarning((std::string("Cannot load: ").append(filepath)).c_str());
         }
 
         this->sound.setBuffer(this->buf);

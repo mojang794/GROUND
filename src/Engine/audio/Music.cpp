@@ -6,8 +6,7 @@ namespace gr
     Music::Music(std::string filepath)
     {
         if (!this->sound.openFromFile(filepath)) {
-            gr::Log((std::string("Cannot load: ").append(filepath)).c_str());
-            throw "Error! cannot load '" + filepath + "'!";
+            gr::LogWarning((std::string("Cannot load: ").append(filepath)).c_str());
         }
     }
     

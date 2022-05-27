@@ -27,6 +27,7 @@ namespace gr
         if (file == NULL)
         {
             gr::LogError("Impossible to open the file ! Are you in the right path ?");
+            GR_ASSERT(file == NULL);
             getchar();
             return false;
         }
@@ -69,6 +70,7 @@ namespace gr
                 if (matches != 9)
                 {
                     gr::LogError("File can't be read by our simple parser :-( Try exporting with other options");
+                    GR_ASSERT(matches != 9);
                     fclose(file);
                     return false;
                 }
@@ -114,7 +116,7 @@ namespace gr
         return true;
     }
 
-    unsigned int LoadTexture2D(int width, int height, const char *file)
+    unsigned int LoadTexture2D(const char *file)
     {
         unsigned int _id;
         glGenTextures(1, &_id);
@@ -127,7 +129,7 @@ namespace gr
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        int nrChannels;
+        int nrChannels, width, height;
         unsigned char *data = stbi_load(file, &width, &height, &nrChannels, 0);
         if (data)
         {
@@ -138,9 +140,43 @@ namespace gr
         {
             gr::LogError("Failed to load texture");
         }
+        GR_ASSERT(data);
         stbi_image_free(data);
 
         return _id;
+    }
+
+    unsigned int LoadCubeMap(std::vector<std::string> files)
+    {
+        unsigned int _id;
+        glGenTextures(1, &_id);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, _id);
+
+        int width, height, nrChannels;
+        for (unsigned int i = 0; i < files.size(); i++)
+        {
+            unsigned char *data = stbi_load(files[i].c_str(), &width, &height, &nrChannels, 0);
+            if (data)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+                            0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+                );
+                stbi_image_free(data);
+            }
+            else
+            {
+                gr::LogError((std::string("Cubemap tex failed to load at path: ").append(files[i])).c_str());
+                stbi_image_free(data);
+            }
+            GR_ASSERT(data);
+        }
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); 
+
+        return _id;  
     }
 
     void GetSupportExtensions()

@@ -12,7 +12,7 @@ namespace gr
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 10);
         printf("[LOG] %s \n", text);
-        SetConsoleTextAttribute(hConsole, 0);
+        SetConsoleTextAttribute(hConsole, 7);
         #else
         printf("\033[0;34m[LOG] %s \n", text);
         #endif
@@ -24,7 +24,7 @@ namespace gr
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 12);
         printf("[ERROR: %d] %s \n", __LINE__, text);
-        SetConsoleTextAttribute(hConsole, 0);
+        SetConsoleTextAttribute(hConsole, 7);
         #else
         printf("\031[0;31m[ERROR: %d] %s \n", __LINE__, text);
         #endif
@@ -36,7 +36,7 @@ namespace gr
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 14);
         printf("[WARNING: %d] %s \n", __LINE__, text);
-        SetConsoleTextAttribute(hConsole, 0);
+        SetConsoleTextAttribute(hConsole, 7);
         #else
         printf("\033[0;33m[WARNING: %d] %s \n", __LINE__, text);
         #endif

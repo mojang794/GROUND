@@ -10,7 +10,7 @@ namespace gr {
 	class Color
 	{
 	public:
-		float r, g, b;
+		float r, g, b, a;
 
 	public:
 		Color(){}
@@ -22,15 +22,30 @@ namespace gr {
 			b = B;
 		}
 
+		Color(float R, float G, float B, float A)
+		{
+			r = R;
+			g = G;
+			b = B;
+			a = A;
+		}
+
 		glm::vec3 getColor3V() const
 		{
 			return glm::vec3(r, g, b);
 		}
+
+		glm::vec4 getColor4V() const
+		{
+			return glm::vec4(r, g, b, a);
+		}
 	};
 
-	const Color purple = Color(143, 0, 255);
-	const Color gray = Color(128, 128, 128);
-	const Color yellow = Color(1, 1, 0);
-	const Color black = Color(0, 0, 0);
-	const Color white = Color(255, 255, 255);
+	namespace colors {
+		const static Color purple = Color(143, 0, 255);
+		const static Color gray = Color(128, 128, 128);
+		const static Color yellow = Color(1, 1, 0);
+		const static Color black = Color(0, 0, 0);
+		const static Color white = Color(255, 255, 255);
+	}
 }

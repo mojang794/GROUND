@@ -29,7 +29,7 @@ namespace gr
 
         unsigned int fbostatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (fbostatus != GL_FRAMEBUFFER_COMPLETE)
-            gr::Log((std::string("Framebuffer error: ").append(std::to_string(fbostatus))).c_str());
+            gr::LogError((std::string("Framebuffer error: ").append(std::to_string(fbostatus))).c_str());
 
         shader = new Shader(vPath, fPath);
 

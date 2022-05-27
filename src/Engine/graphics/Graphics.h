@@ -21,7 +21,13 @@ namespace gr
     /**
      * @brief This function load a 2D texture
      */
-    unsigned int LoadTexture2D(int width, int height, const char* file);
+    unsigned int LoadTexture2D(const char* file);
+    /**
+     * @brief This function load a cube map texture
+     * 
+     * @param files The files, the correct order of the cubemap is: right, left, top, bottom, front, back
+     */
+    unsigned int LoadCubeMap(std::vector<std::string> files);
 
 
     // static API

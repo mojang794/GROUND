@@ -7,7 +7,7 @@ INCLUDE	:= include
 LIB		:= lib
 
 ifeq ($(OS),Windows_NT)
-	LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lopenal32 -lopengl32 -luser32 -lkernel32 -municode
+	LIBRARIES	:= -lfreetype -lsfml-window -lsfml-system -lsfml-audio -lopenal32 -lopengl32 -luser32 -lkernel32 -municode
 else
 	LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lGL
 endif

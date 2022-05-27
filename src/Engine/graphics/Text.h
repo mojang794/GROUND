@@ -5,35 +5,43 @@
 #include <string>
 #include "../system/Color.h"
 #include "Shader.h"
+#include <map>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 namespace gr
 {
+    struct Character {
+        unsigned int TextureID;  // ID handle of the glyph texture
+        glm::ivec2   Size;       // Size of glyph
+        glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
+        unsigned int Advance;    // Offset to advance to next glyph
+    };
+
     /**
      * @brief Text class for display, resize and change color of a text on the screen
      * 
      */
     class Text
     {
-    private:
-        glm::vec2 _pos, _size;
-        unsigned int _text, _vao, _vbo;
-        std::string _textString;
-        gr::Color _color;
-        gr::Shader _shader;
-        glm::mat4 _model;
-
     public:
-        Text();
-        Text(glm::vec2 position, glm::vec2 size, const char* text);
-        Text(glm::vec2 position, glm::vec2 size, const char* text, const char* Vshader, const char* Fshader);
+        Text(glm::vec2 w_size, glm::vec2 position, const char* text, const char* font, float scale);
         
         void SetPosition(glm::vec2 position);
-        void SetSize(glm::vec2 size);
-        void SetTextString(const char* string);
 
         // in case we don't use a custom shader
         void SetColor(gr::Color color);
 
         void Draw();
+        
+    private:
+        float _scale;
+        unsigned int _vao, _vbo;
+        std::map<char, Character> _chars;
+        std::string _textString, _font;
+        glm::vec2 _pos;
+        gr::Color _color;
+        gr::Shader *_shader;
+        FT_Face face;
     };
 }

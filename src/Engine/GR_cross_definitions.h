@@ -8,6 +8,8 @@
 #include <GL/glew.h>
 #endif
 
+#define GR_ASSERT(condition) assert(condition)
+
 namespace gr
 {
     // Log a string
