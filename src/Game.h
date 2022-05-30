@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include "Engine/system/StateMachine.h"
+#include "Engine/utils/ConfigParser.h"
 #include <SFML/Window.hpp>
 #include "Engine/ECS.h"
 
@@ -13,9 +14,9 @@ struct GameData
 	gr::StateMachine machine;
 	sf::Window window;
 	sf::Event event;
-	std::map<std::string, int> supported_keys;
-	std::map<std::string, int> graphics_settings;
-	std::map<std::string, int> audio_settings;
+	gr::ConfigFile<int> supported_keys;
+	gr::ConfigFile<int> graphics_settings;
+	gr::ConfigFile<int> audio_settings;
 };
 
 typedef std::shared_ptr<GameData> GameDataRef;

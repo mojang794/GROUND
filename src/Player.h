@@ -4,13 +4,14 @@
 #include "Engine/Joypad.h"
 #include "Engine/ECS.h"
 #include "Engine/Components/TransformComponent.h"
+#include "Engine/utils/ConfigParser.h"
 #include <glm/glm.hpp>
 #include <map>
 
 class Player
 {
 public:
-    Player(std::map<std::string, int> keys, gr::Manager* m);
+    Player(gr::ConfigFile<int> keys, gr::Manager* m);
     ~Player();
 
     void init();
@@ -27,7 +28,7 @@ public:
 private:
     gr::Camera* camera;
     gr::Joypad joypad;
-    std::map<std::string, int> _keys;
+    gr::ConfigFile<int> _keys;
     gr::Entity* ui;
     glm::vec3 _objectColor;
     gr::TransformComponent* p_transform;

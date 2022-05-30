@@ -3,7 +3,7 @@
 #include <SFML/Window.hpp>
 #include "Definitions.h"
 
-Player::Player(std::map<std::string, int> keys, gr::Manager *m)
+Player::Player(gr::ConfigFile<int> keys, gr::Manager *m)
     : _keys(keys)
 {
     this->ui = &m->addEntity();
@@ -32,26 +32,26 @@ void Player::update(float deltaTime)
 {
     p_transform->position = camera->Position;
     
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("W"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["W"])))
     {
         camera->ProcessKeyboard(gr::FORWARD, 5 * deltaTime);
     }
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("S"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["S"])))
     {
         camera->ProcessKeyboard(gr::BACKWARD, 5 * deltaTime);
     }
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("A"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["A"])))
     {
         camera->ProcessKeyboard(gr::LEFT, 5 * deltaTime);
     }
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("D"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["D"])))
     {
         camera->ProcessKeyboard(gr::RIGHT, 5 * deltaTime);
     }
 
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("LEFT_ARROW"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["LEFT_ARROW"])))
         camera->ProcessMouseMovement(-8, 0);
-    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys.at("RIGHT_ARROW"))))
+    if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)(_keys["RIGHT_ARROW"])))
         camera->ProcessMouseMovement(8, 0);
 
     if (joypad.ifConnected(0))

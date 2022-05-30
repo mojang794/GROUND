@@ -16,22 +16,22 @@ Game::Game(std::string title)
 		this->initFile();
 
 		sf::ContextSettings settings;
-		settings.antialiasingLevel = _data->graphics_settings.at("antialiasing");
+		settings.antialiasingLevel = _data->graphics_settings["antialiasing"];
 		settings.majorVersion = 3;
 		settings.minorVersion = 3;
 		settings.depthBits = 24;
 		settings.stencilBits = 8;
 		this->_data->window.create(
-			(_data->graphics_settings.at("FULLSCREEN") == 0 ? 
-				sf::VideoMode( _data->graphics_settings.at("WIDTH"), _data->graphics_settings.at("HEIGHT")) :
+			(_data->graphics_settings["FULLSCREEN"] == 0 ? 
+				sf::VideoMode( _data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"]) :
 				sf::VideoMode::getDesktopMode()
 			),
 			title, 
-			(_data->graphics_settings.at("FULLSCREEN") == 0 ? sf::Style::Default : sf::Style::Fullscreen), 
+			(_data->graphics_settings["FULLSCREEN"] == 0 ? sf::Style::Default : sf::Style::Fullscreen), 
 			settings
 		);
-		this->_data->window.setFramerateLimit(_data->graphics_settings.at("FPS"));
-		this->_data->window.setVerticalSyncEnabled(_data->graphics_settings.at("VSYNC"));
+		this->_data->window.setFramerateLimit(_data->graphics_settings["FPS"]);
+		this->_data->window.setVerticalSyncEnabled(_data->graphics_settings["VSYNC"]);
 
 		gr::InitOpenGL();
 
@@ -54,53 +54,9 @@ Game::Game(std::string title)
 
 void Game::initFile()
 {
-	{
-		std::ifstream file(WINDOW_SETTINGS);
-		std::string key = "";
-		char symbol;
-		int value;
-		if (file.is_open()) {
-			while (file >> key >> symbol >> value)
-			{
-				if (symbol == '=')
-				{
-					this->_data->graphics_settings[key] = value;
-				}
-			}
-		}
-
-		file.close();
-	}
-
-	{
-		std::ifstream file(AUDIO_SETTINGS);
-		std::string key = "";
-		char symbol;
-		int value;
-		while (file >> key >> symbol >> value)
-		{
-			if (symbol == '=')
-			{
-				this->_data->audio_settings[key] = value;
-			}
-		}
-		file.close();
-	}
-
-	{
-		std::ifstream file(KEYBOARD_SETTINGS);
-		std::string key = "";
-		char symbol;
-		int value;
-		while (file >> key >> symbol >> value)
-		{
-			if (symbol == '=')
-			{
-				this->_data->supported_keys[key] = value;
-			}
-		}
-		file.close();
-	}
+	this->_data->graphics_settings.open("settings/Window.ini");
+	this->_data->audio_settings.open("settings/Audio.ini");
+	this->_data->supported_keys.open("settings/Keyboard.ini");
 }
 
 void Game::run()
