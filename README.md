@@ -40,5 +40,5 @@ technically yes, in practice it is an engine I'm working on
 - GLFW3
 - GLM
 - freetype (For text display using OpenGL)
-- Dear ImGui / Dear ImGui for SFML
+- Dear ImGui
 - OpenAL
