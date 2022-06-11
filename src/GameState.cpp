@@ -1,6 +1,5 @@
 #include "GameState.h"
 #include <GL/GL.h>
-#include <Windows.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "Engine/graphics/Graphics.h"
@@ -9,13 +8,11 @@
 #include "Engine/Components.h"
 #include "Engine/graphics/Shapes.h"
 #include "Engine/system/Collision.h"
-#include "Engine/graphics/Framebuffer.h"
-#include "Engine/graphics/Text.h"
 #include "Definitions.h"
-
-gr::Entity* e, *h;
-gr::Framebuffer* b;
-gr::Text* _t;
+#include <imgui.h>
+#include "Engine/audio/SoundSource.h"
+#include "Engine/audio/SoundDevice.h"
+#include "Engine/audio/SoundBuffer.h"
 
 GameState::GameState(GameDataRef data)
     : _data(data)
@@ -25,6 +22,11 @@ GameState::GameState(GameDataRef data)
 
 void GameState::init()
 {
+    // gr::SoundDevice::get();
+    uint32_t sound = gr::SoundBuffer::get()->addSoundBuffer("Core/audio/P_hurt.wav");
+    gr::SoundSource sSource;
+    sSource.Play(sound);
+
     player = new Player(_data->supported_keys, &_data->manager);
     player->init();
     
@@ -40,7 +42,7 @@ void GameState::init()
     h->addComponent<gr::TransformComponent>(5, 0, 5, glm::vec3(1.0));
     h->addComponent<gr::Basic3DGeometry>(gr::Basic3DGeometryShapes::PYRAMID, gr::Basic3DGeometryRotation::Y, GetShadingPath("piramydFrag.frag"), GetShadingPath("lightShader.vert"));
 
-    b = new gr::Framebuffer(_data->window.getSize().x, _data->window.getSize().y, GetShadingPath("Frame.vert"), GetShadingPath("Frame.frag"));
+    b = new gr::Framebuffer(_data->WindowSize.x, _data->WindowSize.y, GetShadingPath("Frame.vert"), GetShadingPath("Frame.frag"));
 
     _t = new gr::Text(glm::vec2(1024, 768), glm::vec2(10, 10), "Hello World!", "Core/fonts/arial.ttf", 1.0f);
     _t->SetColor(gr::colors::purple);
@@ -48,7 +50,7 @@ void GameState::init()
 
 void GameState::update(float deltaTime)
 {
-    player->update(deltaTime);
+    player->update(deltaTime, _data->window);
 }
 
 void GameState::draw()
@@ -63,9 +65,7 @@ void GameState::draw()
     _t->Draw();
 
     test->getComponent<gr::Basic3DGeometry>().SetProjectionView(
-        player->GetProjection(
-            _data->window.getSize().x,
-            _data->window.getSize().y),
+        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
         player->GetView()
     );
     player->UpdateDraw();
@@ -74,9 +74,7 @@ void GameState::draw()
     );
 
     e->getComponent<gr::ModelComponent>().SetProjectionView(
-        player->GetProjection(
-            _data->window.getSize().x,
-            _data->window.getSize().y),
+        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
         player->GetView()
     );
     e->getComponent<gr::ModelComponent>().SetLightAttribute(
@@ -84,9 +82,7 @@ void GameState::draw()
     );
 
     h->getComponent<gr::Basic3DGeometry>().SetProjectionView(
-        player->GetProjection(
-            _data->window.getSize().x,
-            _data->window.getSize().y),
+        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
         player->GetView()
     );
     h->getComponent<gr::Basic3DGeometry>().SetLightAttribute(

@@ -8,15 +8,15 @@ technically yes, in practice it is an engine I'm working on
 - [x] 3D Support
 - [x] Camera support
 - [x] Shading support
-- [x] Joystick support
-- [ ] Full Audio Support
+- [ ] Joystick support
 - [x] Basic OpenGL
+- [ ] Full Audio Support
 
 # Engine
 
-### audio
+### audio // Work in progress
 - Sound2D
-- Sound3D // Work in progress...
+- Sound3D
 - Music
 ### system
 - Vertex
@@ -31,5 +31,14 @@ technically yes, in practice it is an engine I'm working on
 - VBO class
 - Texture class
 - FrameBuffer class
+- 3D Camera class
 ### utils
 - Mathematic/util header
+- Simple Config file parser
+# Libraries used in this project
+- glad(Windows) / glew(Linux)
+- GLFW3
+- GLM
+- freetype (For text display using OpenGL)
+- Dear ImGui / Dear ImGui for SFML
+- OpenAL

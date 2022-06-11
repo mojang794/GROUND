@@ -1,7 +1,4 @@
 #include "GR_cross_definitions.h"
-#ifdef _WIN32
-#include <windows.h>
-#endif
 #include <stdio.h>
 
 namespace gr
@@ -11,7 +8,7 @@ namespace gr
         #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 10);
-        printf("[LOG] %s \n", text);
+        printf("[OK] %s \n", text);
         SetConsoleTextAttribute(hConsole, 7);
         #else
         printf("\033[0;34m[LOG] %s \n", text);
@@ -23,10 +20,10 @@ namespace gr
         #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 12);
-        printf("[ERROR: %d] %s \n", __LINE__, text);
+        printf("[ERROR] %s \n", text);
         SetConsoleTextAttribute(hConsole, 7);
         #else
-        printf("\031[0;31m[ERROR: %d] %s \n", __LINE__, text);
+        printf("\031[0;31m[ERROR] %s \n", text);
         #endif
     }
     
@@ -35,11 +32,12 @@ namespace gr
         #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleTextAttribute(hConsole, 14);
-        printf("[WARNING: %d] %s \n", __LINE__, text);
+        printf("[WARNING] %s \n", text);
         SetConsoleTextAttribute(hConsole, 7);
         #else
-        printf("\033[0;33m[WARNING: %d] %s \n", __LINE__, text);
+        printf("\033[0;33m[WARNING] %s \n", text);
         #endif
+        
     }
 
     bool InitOpenGL()

@@ -113,7 +113,7 @@ namespace gr
                 glTexImage2D(
                     GL_TEXTURE_2D,
                     0,
-                    GL_RGBA,
+                    GL_RED,
                     face->glyph->bitmap.width,
                     face->glyph->bitmap.rows,
                     0,

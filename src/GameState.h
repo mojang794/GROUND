@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include "Engine/ECS.h"
 #include "Player.h"
+#include "Engine/graphics/Framebuffer.h"
+#include "Engine/graphics/Text.h"
 
 class GameState : public gr::States
 {
@@ -12,6 +14,9 @@ private:
 	GameDataRef _data;
 	gr::Entity* test;
 	Player* player;
+	gr::Entity* e, *h;
+	gr::Framebuffer* b;
+	gr::Text* _t;
 
 public:
 	GameState(GameDataRef data);

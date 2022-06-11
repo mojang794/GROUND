@@ -7,9 +7,9 @@ INCLUDE	:= include
 LIB		:= lib
 
 ifeq ($(OS),Windows_NT)
-	LIBRARIES	:= -lfreetype -lsfml-window -lsfml-system -lsfml-audio -lopenal32 -lopengl32 -luser32 -lkernel32 -municode
+	LIBRARIES	:= -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lfreetype -lglfw3 -lopenal32 -lopengl32 -luser32 -lkernel32 -municode -lgdi32
 else
-	LIBRARIES	:= -lsfml-window -lsfml-system -lsfml-audio -lGL
+	LIBRARIES	:= -lglfw3 -lGL
 endif
 
 EXECUTABLE_R	:= GROUND_release.exe
@@ -27,18 +27,18 @@ ENGINE_C	:= src/Engine/Components
 all: debug
 
 ifeq ($(OS),Windows_NT)
-release: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+release: $(EXTERNAL)/*.c $(EXTERNAL)/*.cpp $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
 		$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(EXECUTABLE_R) $(LIBRARIES) -D _RELEASE
 
-debug: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+debug: $(EXTERNAL)/*.c  $(EXTERNAL)/*.cpp $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $(BIN)/$(EXECUTABLE_D) $(LIBRARIES)
 # Linux case or any other system:
-#	Install SFML and glew
+#	Install GLFW, OpenAL and glew
 else
-release: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+release: $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
 		$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $(BIN)/$(EXECUTABLE_R) $(LIBRARIES) -D _RELEASE
 
-debug: $(EXTERNAL)/*.c $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
+debug: $(SRC)/*.cpp $(ENGINE)/*.cpp $(ENGINE_G)/*.cpp $(ENGINE_GB)/*.cpp $(ENGINE_S)/*.cpp $(ENGINE_C)/*.cpp $(ENGINE_A)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $(BIN)/$(EXECUTABLE_D) $(LIBRARIES)
 endif
 

@@ -28,8 +28,8 @@ int main(int argc __attribute__((unused)), char** argv __attribute__((unused)))
 
     try {
         ::Game("GROUND");
-    } catch(const char*& e) {
-        std::cout << "Error! an error occurred!" << std::endl << "Message: " << e << std::endl;
+    } catch(std::exception& e) {
+        std::cout << "Error! an error occurred!" << std::endl << "Message: " << e.what() << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(5));
         return 1;
     }  

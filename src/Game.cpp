@@ -1,3 +1,7 @@
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include "Game.h"
 #include <fstream>
 #include <iostream>
@@ -14,26 +18,38 @@ Game::Game(std::string title)
 {
 	try {
 		this->initFile();
-
-		sf::ContextSettings settings;
-		settings.antialiasingLevel = _data->graphics_settings["antialiasing"];
-		settings.majorVersion = 3;
-		settings.minorVersion = 3;
-		settings.depthBits = 24;
-		settings.stencilBits = 8;
-		this->_data->window.create(
-			(_data->graphics_settings["FULLSCREEN"] == 0 ? 
-				sf::VideoMode( _data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"]) :
-				sf::VideoMode::getDesktopMode()
-			),
-			title, 
-			(_data->graphics_settings["FULLSCREEN"] == 0 ? sf::Style::Default : sf::Style::Fullscreen), 
-			settings
-		);
-		this->_data->window.setFramerateLimit(_data->graphics_settings["FPS"]);
-		this->_data->window.setVerticalSyncEnabled(_data->graphics_settings["VSYNC"]);
+		glfwInit();
+		if(_data->graphics_settings["FULLSCREEN"] == 1) {
+			_data->window = glfwCreateWindow(_data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"],
+											title.c_str(), glfwGetPrimaryMonitor(), NULL);
+		}
+		else {
+			_data->window = glfwCreateWindow(_data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"],
+											title.c_str(), NULL, NULL);
+		}
+		#ifdef _WIN32
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		#else
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+		#endif
+		glfwWindowHint(GLFW_SAMPLES, _data->graphics_settings["antialiasing"]);
+		glfwMakeContextCurrent(_data->window);
+		if (_data->graphics_settings["VSYNC"] == 0) {
+			glfwSwapInterval(0);
+		}
 
 		gr::InitOpenGL();
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(_data->window, true);
+		ImGui_ImplOpenGL3_Init("#version 330");
 
 		_data->machine.AddState(gr::StatesRef(new GameState(this->_data)));
 
@@ -45,10 +61,9 @@ Game::Game(std::string title)
 
 		this->run();
 	} catch(std::exception& e) {
-		std::cout << "ERROR! something have goes wrong!" << std::endl
+		std::cout << "ERROR! something went wrong!" << std::endl
 				  << "Error: " << e.what() << std::endl;
-		sf::sleep(sf::seconds(5.f));
-		exit(1);
+		return;
 	}
 }
 
@@ -62,45 +77,45 @@ void Game::initFile()
 void Game::run()
 {
 	try {
-		glEnable(GL_DEPTH_TEST);
-
 		// Predefined Shader
 		gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
 
 #if defined(_WIN32) && !defined(_RELEASE)
 		ShowWindow(GetConsoleWindow(), SW_SHOW);
 #endif
-
-		while (_data->window.isOpen())
+		float m_LastTime = 0, deltatime = 0;
+		while (!glfwWindowShouldClose(_data->window))
 		{
-
+			glfwGetWindowSize(_data->window, &_data->WindowSize.x, &_data->WindowSize.y);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			this->_data->machine.ProcessChanges();
 			
-			while(_data->window.pollEvent(_data->event))
-			{
-				if (_data->event.type == sf::Event::Closed) _data->window.close();
-				if (_data->event.type == sf::Event::Resized) glViewport(0, 0, _data->event.size.width, _data->event.size.height);
-			}
-
-			this->deltatime = this->clock.restart();
-			this->accumulator += deltatime;
-			while (this->accumulator >= this->ups)
-			{
-				this->accumulator -= this->ups;
-				if (_data->window.hasFocus())
-				{
-					this->_data->machine.GetActiveState()->update(this->ups.asSeconds());
-					_data->manager.refresh();
-					_data->manager.update(this->ups.asSeconds());
-				}
-			}
+			float time = glfwGetTime();
+			deltatime = time - m_LastTime;
+			m_LastTime = time;
 			
+			this->_data->machine.GetActiveState()->update(deltatime);
+			_data->manager.refresh();
+			_data->manager.update(deltatime);
+
+			ImGui_ImplGlfw_NewFrame();
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui::NewFrame();
+
 			this->_data->machine.GetActiveState()->draw();
 			this->_data->manager.draw();
 			this->_data->machine.GetActiveState()->AfterDraw();
 			
-			this->_data->window.display();
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			glfwSwapBuffers(_data->window);
+			glfwPollEvents();
 		}
+
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 
 		this->_data->manager.destroyGL();
 		this->_data->machine.GetActiveState()->destroyGL();

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Engine/Camera.h"
-#include "Engine/Joypad.h"
 #include "Engine/ECS.h"
 #include "Engine/Components/TransformComponent.h"
 #include "Engine/utils/ConfigParser.h"
 #include <glm/glm.hpp>
 #include <map>
+#include <GLFW/glfw3.h>
 
 class Player
 {
@@ -15,7 +15,7 @@ public:
     ~Player();
 
     void init();
-    void update(float dt);
+    void update(float dt, GLFWwindow* window);
     void UpdateDraw();
 
     glm::mat4 GetProjection(float w, float y) const;
@@ -27,7 +27,6 @@ public:
 
 private:
     gr::Camera* camera;
-    gr::Joypad joypad;
     gr::ConfigFile<int> _keys;
     gr::Entity* ui;
     glm::vec3 _objectColor;

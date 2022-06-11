@@ -1,6 +1,9 @@
 #pragma once
 
 #include <map>
+#include <fstream>
+#include <iostream>
+#include "../GR_cross_definitions.h"
 
 namespace gr
 {
@@ -12,8 +15,10 @@ namespace gr
 
         void open(std::string file);
 
-        T& operator [](std::string key);
+        T& operator[](std::string key);
     private:
         std::map<std::string, T> _keys;
     };
 }
+
+#include "ConfigParser.inl"

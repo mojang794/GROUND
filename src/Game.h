@@ -5,15 +5,16 @@
 #include <map>
 #include "Engine/system/StateMachine.h"
 #include "Engine/utils/ConfigParser.h"
-#include <SFML/Window.hpp>
 #include "Engine/ECS.h"
+#include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 
 struct GameData
 {
+	GLFWwindow* window;
+	glm::ivec2 WindowSize;
 	gr::Manager manager;
 	gr::StateMachine machine;
-	sf::Window window;
-	sf::Event event;
 	gr::ConfigFile<int> supported_keys;
 	gr::ConfigFile<int> graphics_settings;
 	gr::ConfigFile<int> audio_settings;
@@ -28,10 +29,6 @@ public:
 
 private:
 	GameDataRef _data = std::make_shared<GameData>();
-	sf::Time deltatime;
-	sf::Time ups = sf::seconds(1.f / 60.f);
-	sf::Time accumulator = sf::Time::Zero;
-	sf::Clock clock;
 
 	void initFile();
 
