@@ -3,14 +3,9 @@
 #include "../ECS.h"
 #include "TransformComponent.h"
 #include "../graphics/Shader.h"
+#include "GeometryShapes.h"
 
 namespace gr {
-
-    enum Basic2DGeometryShapes
-    {
-        TRIANGLE,
-        SQUARE
-    };
 
     class Basic2DGeometry : public Component
     {

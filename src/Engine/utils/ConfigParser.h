@@ -3,6 +3,7 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include "../GR_cross_definitions.h"
 
 namespace gr
@@ -13,11 +14,20 @@ namespace gr
     public:
         ConfigFile();
 
+        void copy(ConfigFile& e);
         void open(std::string file);
+        /**
+         * @brief Change the values in the config file. 
+         * Basically when we change the map values, this function write the data in the file.
+         */
+        void ChangeValues();
 
+        int GetSize() const;
         T& operator[](std::string key);
-    private:
+
         std::map<std::string, T> _keys;
+    private:
+        std::string filename;
     };
 }
 

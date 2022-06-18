@@ -11,7 +11,7 @@
 class Player
 {
 public:
-    Player(gr::ConfigFile<int> keys, gr::Manager* m);
+    Player(gr::ConfigFile<int>& keys, gr::Manager* m);
     ~Player();
 
     void init();
@@ -24,6 +24,7 @@ public:
     gr::TransformComponent* GetTransform() const;
 
     glm::vec3 lightColor;
+    glm::ivec2 WindowSize;
 
 private:
     gr::Camera* camera;

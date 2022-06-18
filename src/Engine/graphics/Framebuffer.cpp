@@ -36,8 +36,8 @@ namespace gr
         vao.Bind();
         vbo = new base::VBO(sizeof(shapes2D::square), shapes2D::square);
         vbo->Bind();
-        vao.LinkAttribute(0, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, position));
-        vao.LinkAttribute(1, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+        shader->setVertexAttrib("aPos", 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, position));
+        shader->setVertexAttrib("aTexcoord", 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     }
     
@@ -70,6 +70,7 @@ namespace gr
         glBindTexture(GL_TEXTURE_2D, screen);
         vao.Bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        vao.UnBind();
     }
     
     void Framebuffer::Resize(int width, int height)

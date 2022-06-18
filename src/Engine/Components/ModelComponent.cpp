@@ -1,5 +1,5 @@
 #include "ModelComponent.h"
-#include "../graphics/Graphics.h"
+#include "../graphics/GraphicLoader.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
@@ -61,16 +61,13 @@ namespace gr {
             glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
             glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-            glVertexAttribPointer(glGetAttribLocation(shader->ID, "aPos"), 3, GL_FLOAT, false, 0, (void*)0);
-            glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aPos"));
+            shader->setVertexAttrib("aPos", 3, GL_FLOAT, 0, (void*)0);
 
             glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
-            glVertexAttribPointer(glGetAttribLocation(shader->ID, "aUV"), 2, GL_FLOAT, false, 0, (void*)0);
-            glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aUV"));
+            shader->setVertexAttrib("aUV", 3, GL_FLOAT, 0, (void*)0);
 
             glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-            glVertexAttribPointer(glGetAttribLocation(shader->ID, "aNormal"), 3, GL_FLOAT, false, 0, (void*)0);
-            glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aNormal"));
+            shader->setVertexAttrib("aNormal", 3, GL_FLOAT, 0, (void*)0);
 
             glGenTextures(1, &TextureID);
             glBindTexture(GL_TEXTURE_2D, TextureID);

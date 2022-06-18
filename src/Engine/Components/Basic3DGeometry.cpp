@@ -65,14 +65,10 @@ namespace gr {
             break;
         }
 
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aPos"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, position));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aPos"));
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aColor"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, color));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aColor"));
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aTexcoord"), 2, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aTexcoord"));
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aNormal"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aNormal"));
+        shader->setVertexAttrib("aPos", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, position));
+        shader->setVertexAttrib("aColor", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, color));
+        shader->setVertexAttrib("aNormal", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, normal));
+        shader->setVertexAttrib("aTexcoord", 2, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, texCoords));
     }
 
     void Basic3DGeometry::draw()

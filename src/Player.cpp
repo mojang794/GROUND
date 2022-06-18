@@ -2,9 +2,9 @@
 #include "Engine/Components.h"
 #include "Definitions.h"
 
-Player::Player(gr::ConfigFile<int> keys, gr::Manager *m)
-    : _keys(keys)
+Player::Player(gr::ConfigFile<int>& keys, gr::Manager *m)
 {
+    _keys.copy(keys);
     this->ui = &m->addEntity();
 }
 
@@ -30,7 +30,7 @@ void Player::init()
 void Player::update(float deltaTime, GLFWwindow* window)
 {
     p_transform->position = camera->Position;
-    
+
     if (glfwGetKey(window, this->_keys["A"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::LEFT, 5 * deltaTime);
     }

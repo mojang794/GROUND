@@ -49,10 +49,8 @@ namespace gr {
             break;
         }
 
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aPos"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, position));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aPos"));
-        glVertexAttribPointer(glGetAttribLocation(shader->ID, "aColor"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, color));
-        glEnableVertexAttribArray(glGetAttribLocation(shader->ID, "aColor"));
+        shader->setVertexAttrib("aPos", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, position));
+        shader->setVertexAttrib("aColor", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, color));
     }
 
     void Basic2DGeometry::draw()

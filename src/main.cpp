@@ -1,20 +1,19 @@
 // Define macros that have to be defined only one time
 #define STB_IMAGE_IMPLEMENTATION
-
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include "Game.h"
-#include <tchar.h>
+#include "Definitions.h"
 
 #ifdef _WIN32
 #include <windows.h>
 
 // Windows win main, if we run in windows
-int WINAPI wWinMain(
+int WINAPI WinMain(
     HINSTANCE hInstance __attribute__((unused)),
     HINSTANCE hPrevInstance __attribute__((unused)), 
-    LPWSTR lpCmdLine __attribute__((unused)), 
+    LPSTR lpCmdLine __attribute__((unused)), 
     int nShowCmd __attribute__((unused))
     )
 #else
@@ -22,16 +21,10 @@ int WINAPI wWinMain(
 int main(int argc __attribute__((unused)), char** argv __attribute__((unused)))
 #endif
 {
-#if defined(_WIN32) && defined(_RELEASE)
-    ShowWindow(GetConsoleWindow(), SW_HIDE);
-#endif
-
     try {
         ::Game("GROUND");
     } catch(std::exception& e) {
-        std::cout << "Error! an error occurred!" << std::endl << "Message: " << e.what() << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(5));
         return 1;
-    }  
+    }
     return 0;
 }

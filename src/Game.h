@@ -5,14 +5,18 @@
 #include <map>
 #include "Engine/system/StateMachine.h"
 #include "Engine/utils/ConfigParser.h"
+#include "Engine/Console.h"
 #include "Engine/ECS.h"
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
 struct GameData
 {
 	GLFWwindow* window;
-	glm::ivec2 WindowSize;
+	glm::ivec2 WindowSize, ResizedWindow;
 	gr::Manager manager;
 	gr::StateMachine machine;
 	gr::ConfigFile<int> supported_keys;
@@ -29,8 +33,12 @@ public:
 
 private:
 	GameDataRef _data = std::make_shared<GameData>();
-
+	gr::Console _console;
+	bool debugConsole;
+	
 	void initFile();
+	void initWindow(std::string title);
+	void initImGui();
 
 	void run();
 };

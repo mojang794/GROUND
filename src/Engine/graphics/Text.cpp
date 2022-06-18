@@ -8,7 +8,6 @@
 namespace gr
 {
     Text::Text(glm::vec2 w_size, glm::vec2 position, const char *text, const char* font, float scale)
-        : _pos(position), _textString(text), _color(1, 1, 1), _scale(scale), _font(font)
     {
 #ifdef _WIN32
         std::string V = R"END(
@@ -74,6 +73,10 @@ namespace gr
             }
         )END";
 #endif
+        _pos = position;
+        _textString = text;
+        _font = font;
+        _scale = scale;
 
         this->_shader = new gr::Shader(V, F);
         this->_shader->use();
@@ -143,8 +146,7 @@ namespace gr
         glGenBuffers(1, &_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, _vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+        _shader->setVertexAttrib("vertex", 4, GL_FLOAT, 4 * sizeof(float), 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }

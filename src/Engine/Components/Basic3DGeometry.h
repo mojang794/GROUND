@@ -3,22 +3,9 @@
 #include "../ECS.h"
 #include "TransformComponent.h"
 #include "../graphics/Shader.h"
+#include "GeometryShapes.h"
 
 namespace gr {
-    enum Basic3DGeometryShapes
-    {
-        CUBE,
-        PYRAMID
-    };
-
-    enum Basic3DGeometryRotation
-    {
-        X,
-        Y,
-        Z,
-        ALL
-    };
-
     class Basic3DGeometry : public Component
     {
     private:

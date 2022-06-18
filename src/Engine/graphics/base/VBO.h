@@ -3,6 +3,10 @@
 namespace gr
 {
 	namespace base {
+		/**
+		 * @brief base Vertex Buffer Object class
+		 * 
+		 */
 		class VBO
 		{
 		public: unsigned int ID;

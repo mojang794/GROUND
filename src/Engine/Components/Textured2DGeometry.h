@@ -3,15 +3,10 @@
 #include "../ECS.h"
 #include "../graphics/Shader.h"
 #include "TransformComponent.h"
+#include "GeometryShapes.h"
 
 namespace gr
 {
-    enum Basic2DGeometryShapes
-    {
-        TRIANGLE,
-        SQUARE
-    };
-
     class Textured2DGeometry : public Component
     {
     private:
@@ -22,15 +17,12 @@ namespace gr
         TransformComponent* _transform;
         const char* _file;
         Basic2DGeometryShapes _shapes;
-        glm::vec3 _lColor, _lPos, _cPos, _cFront;
 
     public:
         Textured2DGeometry(const char* file, Basic2DGeometryShapes shape);
 
         unsigned int GetBuffer();
         Shader* GetShader();
-
-        void SetLightAttribute(glm::vec3 color, glm::vec3 pos, glm::vec3 camPos, glm::vec3 camFront);
 
         void init() override;
         void draw() override;

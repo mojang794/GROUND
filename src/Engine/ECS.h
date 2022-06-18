@@ -1,3 +1,8 @@
+/**
+ * @file ECS.h
+ * @brief Base class for the Entity-Component-System
+ */
+
 #pragma once
 #include <iostream>
 #include <vector>

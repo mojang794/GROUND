@@ -5,11 +5,11 @@ namespace gr
     {
         alGenSources(1, &source);
         alSourcef(source, AL_PITCH, pitch);
-        alSourcef(source, AL_GAIN, pitch);
+        alSourcef(source, AL_GAIN, gain);
         alSource3f(source, AL_POSITION, position[0], position[1], position[2]);
         alSource3f(source, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
         alSourcei(source, AL_LOOPING, loop);
-        alSourcef(source, AL_BUFFER, buffer);
+        alSourcei(source, AL_BUFFER, buffer);
     }
     
     SoundSource::~SoundSource()
@@ -26,5 +26,20 @@ namespace gr
         }
 
         alSourcePlay(source);
+    }
+    
+    void SoundSource::SetVolume(float volume)
+    {
+        alSourcef(source, AL_GAIN, volume);
+    }
+    
+    void SoundSource::SetLoop(bool loop)
+    {
+        alSourcei(source, AL_LOOPING, loop);
+    }
+    
+    void SoundSource::SetPosition(float position[3])
+    {
+        alSource3f(source, AL_POSITION, position[0], position[1], position[2]);
     }
 }

@@ -4,18 +4,18 @@
 namespace gr
 {
 	namespace base {
+		/**
+		 * @brief base Vertex Array Object class
+		 * 
+		 */
 		class VAO
 		{
 		public: unsigned int ID;
 
 		public:
 			VAO();
-
-			void LinkAttribute(unsigned int index, int size, unsigned int type, int stride, const void* pointer);
-
 			void Bind();
 			void UnBind();
-			
 			void Delete();
 		};
 	}

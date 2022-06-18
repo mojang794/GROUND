@@ -1,7 +1,7 @@
 #include "Textured2DGeometry.h"
 #include "../GR_cross_definitions.h"
 #include "../graphics/Shapes.h"
-#include "../graphics/Graphics.h"
+#include "../graphics/GraphicLoader.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace gr
@@ -22,14 +22,6 @@ namespace gr
         return _shader;
     }
     
-    void Textured2DGeometry::SetLightAttribute(glm::vec3 color, glm::vec3 pos, glm::vec3 camPos, glm::vec3 camFront)
-    {
-        this->_lColor = color;
-        this->_lPos = pos;
-        this->_cPos = camPos;
-        this->_cFront = camFront;
-    }
-    
     void Textured2DGeometry::init()
     {
         if (!entity->hasComponent<TransformComponent>())
@@ -46,11 +38,11 @@ namespace gr
         } else {
             glBufferData(GL_ARRAY_BUFFER, sizeof(gr::shapes2D::triangle), shapes2D::triangle, GL_STATIC_DRAW);
         }
-        glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-        glVertexAttribPointer(glGetAttribLocation(_shader->ID, "aPos"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, position));
-        glVertexAttribPointer(glGetAttribLocation(_shader->ID, "aColor"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, color));
-        glVertexAttribPointer(glGetAttribLocation(_shader->ID, "aNormal"), 3, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-        glVertexAttribPointer(glGetAttribLocation(_shader->ID, "aTexcoord"), 2, GL_FLOAT, false, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+
+        _shader->setVertexAttrib("aPos", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, position));
+        _shader->setVertexAttrib("aColor", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, color));
+        _shader->setVertexAttrib("aNormal", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, normal));
+        _shader->setVertexAttrib("aTexcoord", 2, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, texCoords));
 
         _texture = gr::LoadTexture2D(this->_file);
     }
@@ -70,6 +62,8 @@ namespace gr
         } else {
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     void Textured2DGeometry::destroyGL()

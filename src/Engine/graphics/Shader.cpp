@@ -94,7 +94,7 @@ void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
     }
     catch (std::ifstream::failure e)
     {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ FILE\nCOMPILE ERROR: " << e.what() << std::endl;
+        gr::LogError(GR_TO_CSTRING("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ FILE\nCOMPILE ERROR: ", e.what()));
     }
     const char *vShaderCode = vertexCode.c_str();
     const char *fShaderCode = fragmentCode.c_str();
@@ -272,4 +272,10 @@ void gr::Shader::setMat3(const std::string &name, const glm::mat3 &mat) const
 void gr::Shader::setMat4(const std::string &name, const glm::mat4 &mat) const
 {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
+
+void gr::Shader::setVertexAttrib(const char* attribName, short size, unsigned type, int stride, const void* pointer)
+{
+    glVertexAttribPointer(glGetAttribLocation(ID, attribName), size, type, false, stride, pointer);
+    glEnableVertexAttribArray(glGetAttribLocation(ID, attribName));
 }

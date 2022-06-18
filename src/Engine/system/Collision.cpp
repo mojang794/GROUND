@@ -15,7 +15,7 @@ namespace gr
                 
         bool collisionZ = one->position.z + one->size.z >= two->position.z &&
             two->position.z + two->size.z >= one->position.z;
-        
+
         return collisionX && collisionY && collisionZ;
     }
 
