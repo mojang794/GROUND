@@ -10,6 +10,7 @@
 #include "../Engine/audio/SoundSource.h"
 #include "../Engine/audio/SoundBuffer.h"
 #include "../Engine/audio/SoundDevice.h"
+#include "../Engine/window/Mouse.h"
 
 GameState::GameState(GameDataRef data)
     : _data(data)
@@ -38,10 +39,14 @@ void GameState::init()
     h->addComponent<gr::TransformComponent>(5, 0, 5, glm::vec3(1.0));
     h->addComponent<gr::Basic3DGeometry>(gr::Basic3DGeometryShapes::PYRAMID, gr::Basic3DGeometryRotation::Y, GetShadingPath("piramydFrag.frag"), GetShadingPath("lightShader.vert"));
 
-    b = new gr::Framebuffer(_data->WindowSize.x, _data->WindowSize.y, GetShadingPath("Frame.vert"), GetShadingPath("Frame.frag"));
+    playerModel = &_data->manager.addEntity();
+    playerModel->addComponent<gr::TransformComponent>(-5, 0, -5);
+    playerModel->addComponent<gr::ModelComponent>("Core/model/Player2.obj", "Core/GFX/PlayerTexture.png", GetShadingPath("modelFrag.frag"), GetShadingPath("lightShader.vert"), GL_TEXTURE0);
 
-    _t = new gr::Text(glm::vec2(1024, 768), glm::vec2(10, 10), "Hello World!", "Core/fonts/arial.ttf", 1.0f);
-    _t->SetColor(gr::colors::purple);
+    b = new gr::Framebuffer(_data->window->GetWidth(), _data->window->GetHeight(), GetShadingPath("Frame.vert"), GetShadingPath("Frame.frag"));
+
+    _t = new gr::Text(glm::vec2(1024, 768), glm::vec2(10, 750), "Hello World!", "Core/fonts/arial.ttf", 0.5f);
+    _t->SetColor(gr::Color(0, 1, 0));
 
     std::vector<std::string> skyFiles = 
     {
@@ -55,21 +60,36 @@ void GameState::init()
 
     sky = new gr::SkyBox(GetShadingPath("SkyBox.vert"), GetShadingPath("SkyBox.frag"), skyFiles);
 
+
     gr::Log("Loaded everything!");
     sSource->Play(sound);
+
+    gr::Mouse::setCursorVisibility(_data->window, gr::Mouse::SHOW);
 }
+
+double previousTime = glfwGetTime();
 
 void GameState::update(float deltaTime)
 {
     player->update(deltaTime, _data->window);
+
+    double currentTime = glfwGetTime();
+    _data->FPS++;
+    if ( currentTime - previousTime >= 1.0 )
+    {
+        // Display the frame count here any way you want.
+        _t->SetText(std::to_string(_data->FPS));
+
+        _data->FPS = 0;
+        previousTime = currentTime;
+    }
 }
 
 void GameState::draw()
 {
-    this->player->WindowSize = _data->WindowSize;
+    this->player->WindowSize = glm::vec2(_data->window->GetWidth(), _data->window->GetHeight());
 
     b->Bind();
-    glClearColor(0.3, 0.3, 0.3, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
@@ -80,7 +100,7 @@ void GameState::draw()
     player->UpdateDraw();
     
     test->getComponent<gr::Basic3DGeometry>().SetProjectionView(
-        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
+        player->GetProjection(_data->window->GetWidth(), _data->window->GetHeight()),
         player->GetView()
     );
     
@@ -89,15 +109,23 @@ void GameState::draw()
     );
 
     e->getComponent<gr::ModelComponent>().SetProjectionView(
-        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
+        player->GetProjection(_data->window->GetWidth(), _data->window->GetHeight()),
         player->GetView()
     );
     e->getComponent<gr::ModelComponent>().SetLightAttribute(
         player->lightColor, player->GetTransform()->position, player->GetTransform()->position, player->GetFront()
     );
 
+    playerModel->getComponent<gr::ModelComponent>().SetProjectionView(
+        player->GetProjection(_data->window->GetWidth(), _data->window->GetHeight()),
+        player->GetView()
+    );
+    playerModel->getComponent<gr::ModelComponent>().SetLightAttribute(
+        player->lightColor, player->GetTransform()->position, player->GetTransform()->position, player->GetFront()
+    );
+
     h->getComponent<gr::Basic3DGeometry>().SetProjectionView(
-        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
+        player->GetProjection(_data->window->GetWidth(), _data->window->GetHeight()),
         player->GetView()
     );
     h->getComponent<gr::Basic3DGeometry>().SetLightAttribute(
@@ -110,7 +138,7 @@ void GameState::draw()
 void GameState::AfterDraw()
 {
     sky->SetVP(
-        player->GetProjection(_data->WindowSize.x, _data->WindowSize.y),
+        player->GetProjection(_data->window->GetWidth(), _data->window->GetHeight()),
         player->GetView()
     );
     
@@ -133,4 +161,5 @@ void GameState::destroyGL()
     delete h;
     delete b;
     delete _t;
+    delete playerModel;
 }

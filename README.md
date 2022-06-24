@@ -1,30 +1,29 @@
 # GROUND
 
-a 3D game?
-technically yes, in practice it is an engine I'm working on
+a 3D game
 
 ## What does it will containts?
 - [x] ECS(Entity Components System)
 - [x] 3D Support
 - [x] Camera support
 - [x] Shading support
-- [ ] Joystick support
 - [x] Basic OpenGL
+- [ ] Joystick support
 - [ ] Full Audio Support
 
 # Engine
 
-### audio // Work in progress
+### audio
 - Sound2D
 - Sound3D
-- Music
+- Music // Work in progress
 ### system
 - Vertex
 - Color
 - Collision // Work in progress...
 - StateMachine
 ### graphics
-- 3D model load function (ONLY OBJ AT THE MOMENT)
+- 3D model load function (ONLY OBJ AT THE MOMENT: they need Triangles, UV and Normals)
 - Predefined shapes
 - Shader class
 - VAO class
@@ -36,9 +35,16 @@ technically yes, in practice it is an engine I'm working on
 - Mathematic/util header
 - Simple Config file parser
 # Libraries used in this project
+Graphic Libraries:
 - glad(Windows) / glew(Linux)
 - GLFW3
-- GLM
 - freetype (For text display using OpenGL)
 - Dear ImGui
-- OpenAL
+
+Audio Libraries:
+- Soft OpenAL
+- sndfile
+
+Data/Mathematic Libraries:
+- GLM
+- stb_image

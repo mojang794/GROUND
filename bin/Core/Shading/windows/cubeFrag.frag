@@ -16,9 +16,8 @@ void main()
 {
     vec3 Tpixel = texture(uTexture, vTexcoord).rgb;
 
-    FragColor = vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0) * vec4(vTexcoord, 1.0, 1.0);
-    // if (length(Tpixel) == 0)
-    //     FragColor = vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0) * vec4(Tpixel, 1.0);
-    // else
-    //     FragColor = vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0) * vec4(vTexcoord, 1.0, 1.0);
+    if (length(Tpixel) == 0)
+        FragColor = vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0) * vec4(Tpixel, 1.0);
+    else
+        FragColor = vec4(DrawPointLight(vNormal, lightPos, lightColor, viewPos, FragPos, 0.1, 0.5, 32), 1.0) * vec4(1.0, 0.0, 0.949, 1.0);
 }

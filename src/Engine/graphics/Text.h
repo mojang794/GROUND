@@ -28,7 +28,7 @@ namespace gr
         Text(glm::vec2 w_size, glm::vec2 position, const char* text, const char* font, float scale);
         
         void SetPosition(glm::vec2 position);
-
+        void SetText(std::string text);
         // in case we don't use a custom shader
         void SetColor(gr::Color color);
 

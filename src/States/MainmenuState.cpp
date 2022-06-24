@@ -1,5 +1,6 @@
 #include "MainmenuState.h"
 #include "GameState.h"
+#include "../Engine/window/Keyboard.h"
 #include <imgui.h>
 
 MainmenuState::MainmenuState(GameDataRef data)
@@ -14,21 +15,21 @@ void MainmenuState::init()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     title = new gr::Text(
         glm::vec2(1024, 768),
-        glm::vec2(_data->WindowSize.x / 2 - 150, 700),
+        glm::vec2(_data->window->GetWidth() / 2 - 150, 700),
         "GROUND", "Core/fonts/StalinistOne-Regular.ttf",
         1
     );
     title->SetColor(gr::colors::yellow);
     start_text = new gr::Text(
         glm::vec2(1024, 768),
-        glm::vec2(_data->WindowSize.x / 2 - 210, 10),
+        glm::vec2(_data->window->GetWidth() / 2 - 210, 10),
         "Press Enter to start", "Core/fonts/inconsolata-Light.ttf",
         1
     );
     start_text->SetColor(gr::colors::white);
     options_text = new gr::Text(
         glm::vec2(1024, 768),
-        glm::vec2(_data->WindowSize.x / 2 - 210, 200),
+        glm::vec2(_data->window->GetWidth() / 2 - 210, 200),
         "Press P to open options", "Core/fonts/inconsolata-Light.ttf",
         1
     );
@@ -45,7 +46,7 @@ void MainmenuState::init()
 
 void MainmenuState::update(float deltaTime)
 {
-    if (glfwGetKey(_data->window, GLFW_KEY_ENTER)) {
+    if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::ENTER)) {
         _data->audio_settings["GLOBAL_VOLUME"] = (int)_globalV;
         _data->audio_settings["DEVICE"] = (int)_deviceSelected;
         _data->audio_settings.ChangeValues();
@@ -58,7 +59,7 @@ void MainmenuState::draw()
     glClearColor(0.3, 0.3, 0.3, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (glfwGetKey(_data->window, GLFW_KEY_P)) {
+    if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::P)) {
         _options = true;
     }
 

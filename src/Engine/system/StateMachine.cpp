@@ -1,4 +1,6 @@
 #include "StateMachine.h"
+#include <thread>
+#include <memory>
 
 using namespace gr;
 
@@ -52,7 +54,9 @@ void StateMachine::ProcessChanges()
         }
 
         this->_states.push(std::move(this->_newState));
+
         this->_states.top()->init();
+
         this->_isAdding = false;
     }
 }

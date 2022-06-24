@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Engine/Components.h"
 #include "Definitions.h"
+#include "Engine/window/Keyboard.h"
+#include "Engine/window/Mouse.h"
 
 Player::Player(gr::ConfigFile<int>& keys, gr::Manager *m)
 {
@@ -27,27 +29,27 @@ void Player::init()
     p_transform = new gr::TransformComponent(camera->Position.x, camera->Position.y, camera->Position.z, glm::vec3(0.5, 1.0, 0.5));
 }
 
-void Player::update(float deltaTime, GLFWwindow* window)
+void Player::update(float deltaTime, gr::Window* window)
 {
     p_transform->position = camera->Position;
 
-    if (glfwGetKey(window, this->_keys["A"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["A"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::LEFT, 5 * deltaTime);
     }
-    if (glfwGetKey(window, this->_keys["D"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["D"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::RIGHT, 5 * deltaTime);
     }
-    if (glfwGetKey(window, this->_keys["W"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["W"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::FORWARD, 5 * deltaTime);
     }
-    if (glfwGetKey(window, this->_keys["S"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["S"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::BACKWARD, 5 * deltaTime);
     }
 
-    if (glfwGetKey(window, this->_keys["LEFT_ARROW"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LEFT_ARROW"])) {
         this->camera->ProcessMouseMovement(-0.5, 0);
     }
-    if (glfwGetKey(window, this->_keys["RIGHT_ARROW"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["RIGHT_ARROW"])) {
         this->camera->ProcessMouseMovement(0.5, 0);
     }
 }

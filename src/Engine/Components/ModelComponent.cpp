@@ -1,5 +1,6 @@
 #include "ModelComponent.h"
 #include "../graphics/GraphicLoader.h"
+#include "../GR_cross_definitions.h"
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
@@ -40,8 +41,8 @@ namespace gr {
         else { transform = &entity->getComponent<TransformComponent>(); }
 
         if (!res) {
-            std::cerr << "ERROR! cannot load the 3D model! No source file on directory!" << std::endl;
-            throw "ERROR! cannot load the 3D model! No source file on directory!";
+            gr::LogError("ERROR! cannot load the 3D model! No source file on directory!");
+            return;
         }
         else
         {
@@ -62,12 +63,15 @@ namespace gr {
 
             glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
             shader->setVertexAttrib("aPos", 3, GL_FLOAT, 0, (void*)0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
             shader->setVertexAttrib("aUV", 3, GL_FLOAT, 0, (void*)0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
             shader->setVertexAttrib("aNormal", 3, GL_FLOAT, 0, (void*)0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
 
             glGenTextures(1, &TextureID);
             glBindTexture(GL_TEXTURE_2D, TextureID);

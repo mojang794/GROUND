@@ -15,7 +15,7 @@ private:
 	GameDataRef _data;
 	gr::Entity* test;
 	Player* player;
-	gr::Entity* e, *h;
+	gr::Entity* e, *h, *playerModel;
 	gr::Framebuffer* b;
 	gr::Text* _t;
 	gr::SkyBox* sky;

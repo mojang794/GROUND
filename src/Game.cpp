@@ -13,6 +13,7 @@
 #include "Engine/system/DeviceInfo.h"
 #include "Engine/GR_cross_definitions.h"
 #include "Engine/audio/SoundDevice.h"
+#include "Engine/window/Keyboard.h"
 
 Game::Game(std::string title)
 {
@@ -53,7 +54,7 @@ Game::Game(std::string title)
 	{
 		std::cout << "ERROR! something went wrong!" << std::endl
 				  << "Error: " << e.what() << std::endl;
-		ERROR_MESSAGE(glfwGetWin32Window(_data->window), "GROUND", (LPCSTR)GR_TO_CSTRING("Error: ", e.what()));
+		ERROR_MESSAGE(glfwGetWin32Window(_data->window->GetHandle()), "GROUND", (LPCSTR)GR_TO_CSTRING("Error: ", e.what()));
 		return;
 	}
 }
@@ -67,35 +68,25 @@ void Game::initFile()
 
 void Game::initWindow(std::string title)
 {
-	glfwInit();
-	if (_data->graphics_settings["FULLSCREEN"] == 1)
-	{
-		_data->window = glfwCreateWindow(_data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"],
-										 title.c_str(), glfwGetPrimaryMonitor(), NULL);
-	}
-	else
-	{
-		_data->window = glfwCreateWindow(_data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"],
-										 title.c_str(), NULL, NULL);
-	}
-#ifdef _WIN32
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#else
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
-#endif
-	glfwWindowHint(GLFW_SAMPLES, _data->graphics_settings["antialiasing"]);
-	glfwMakeContextCurrent(_data->window);
-	if (_data->graphics_settings["VSYNC"] == 0)
-	{
-		glfwSwapInterval(0);
-	}
+	gr::WindowSettings settings;
 
-	glfwSetFramebufferSizeCallback(_data->window, [](GLFWwindow *w, int x, int y)
-								   { glViewport(0, 0, x, y); });
+	settings.antialiasing = _data->graphics_settings["antialiasing"];
+	settings.Vsync = _data->graphics_settings["VSYNC"];
+	settings.Fullscreen = _data->graphics_settings["FULLSCREEN"];
+#if _WIN32
+	settings.majorVersion = 3;
+	settings.minorVersion = 3;
+	settings.CoreProfile = true;
+#else
+	settings.majorVersion = 2;
+	settings.minorVersion = 1;
+	settings.CoreProfile = false;
+#endif
+
+	_data->window = new gr::Window(
+		_data->graphics_settings["WIDTH"], _data->graphics_settings["HEIGHT"],
+		title.c_str(), settings
+	);
 }
 
 void Game::initImGui()
@@ -106,8 +97,8 @@ void Game::initImGui()
 	(void)io;
 	io.IniFilename = "settings/ImGui_Settings.ini";
 	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(_data->window, true);
-	ImGui_ImplOpenGL3_Init("#version 100");
+	ImGui_ImplGlfw_InitForOpenGL(_data->window->GetHandle(), true);
+	ImGui_ImplOpenGL3_Init("#version 120");
 }
 
 void Game::run()
@@ -115,10 +106,11 @@ void Game::run()
 	// Predefined Shader
 	gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
 	float m_LastTime = 0, deltatime = 0;
-	while (!glfwWindowShouldClose(_data->window))
+	_data->FPS = 0;
+	while (_data->window->IsOpen())
 	{
-		glfwGetWindowSize(_data->window, &_data->WindowSize.x, &_data->WindowSize.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		_data->window->PollEvents();
+
 		this->_data->machine.ProcessChanges();
 
 		// Update scene
@@ -134,13 +126,12 @@ void Game::run()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 
+
 		/*----------Additional keybinds-------------*/
-		if (glfwGetKey(_data->window, GLFW_KEY_F5))
-		{
+		if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::F5)) {
 			debugConsole = true;
 		}
-		if (glfwGetKey(_data->window, GLFW_KEY_ESCAPE))
-		{
+		if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::ESCAPE)) {
 			debugConsole = false;
 		}
 		/*------------------------------------------*/
@@ -150,6 +141,8 @@ void Game::run()
 			_console.Draw();
 		}
 
+		_data->window->Clear();
+
 		// Draw scene
 		this->_data->machine.GetActiveState()->draw();
 		this->_data->manager.draw();
@@ -157,9 +150,8 @@ void Game::run()
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		glfwSwapBuffers(_data->window);
-		glfwPollEvents();
+	
+		_data->window->Display();
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();
@@ -170,4 +162,6 @@ void Game::run()
 	this->_data->machine.GetActiveState()->destroyGL();
 	gr::Shader::DeletePredefinedShader();
 	gr::SoundDevice::CloseDevice();
+
+	delete _data->window;
 }

@@ -57,4 +57,9 @@ namespace gr
         this->_projection = projection;
         this->_view = glm::mat4(glm::mat3(view));
     }
+    
+    unsigned int SkyBox::GetTexture() const
+    {
+        return _skyboxTexture;
+    }
 }

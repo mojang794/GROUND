@@ -28,6 +28,8 @@ namespace gr
          */
         void SetVP(glm::mat4 projection, glm::mat4 view);
 
+        unsigned int GetTexture() const;
+
     private:
         unsigned int _skyboxTexture, _skyboxVAO, _skyboxVBO;
         gr::Shader* _shader;

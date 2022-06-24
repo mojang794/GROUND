@@ -8,13 +8,15 @@ layout (location = 4) in vec2 aUV;
 out vec2 vTexcoord;
 out vec3 vColor;
 out vec3 vNormal;
-out vec2 vUV;
+out vec2 vUV; // for models
 out vec3 FragPos;
+out vec3 vPos;
 
 uniform mat4 projection, model, view;
 
 void main()
 {
+    vPos = vec3(model * vec4(aPos, 1.0));
     vTexcoord = aTexcoord;
     vColor = aColor;
     vNormal = mat3(transpose(inverse(model))) * aNormal;

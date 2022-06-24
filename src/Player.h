@@ -4,9 +4,9 @@
 #include "Engine/ECS.h"
 #include "Engine/Components/TransformComponent.h"
 #include "Engine/utils/ConfigParser.h"
+#include "Engine/window/Window.h"
 #include <glm/glm.hpp>
 #include <map>
-#include <GLFW/glfw3.h>
 
 class Player
 {
@@ -15,7 +15,7 @@ public:
     ~Player();
 
     void init();
-    void update(float dt, GLFWwindow* window);
+    void update(float dt, gr::Window* window);
     void UpdateDraw();
 
     glm::mat4 GetProjection(float w, float y) const;

@@ -155,6 +155,11 @@ namespace gr
     {
         this->_pos = position;
     }
+    
+    void Text::SetText(std::string text)
+    {
+        this->_textString = text;
+    }
 
     void Text::SetColor(gr::Color color)
     {
