@@ -1,5 +1,5 @@
 #include "LightSourceComponent.h"
-#include <glad/glad.h>
+#include "../GR_cross_definitions.h"
 #include "../graphics/Shapes.h"
 
 namespace gr {

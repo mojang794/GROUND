@@ -1,6 +1,5 @@
 #pragma once
-#include <glad/glad.h>
-
+#include "../GR_cross_definitions.h"
 namespace gr
 {
     struct DeviceInfoTypes

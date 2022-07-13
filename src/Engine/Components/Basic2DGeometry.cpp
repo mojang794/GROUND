@@ -1,5 +1,5 @@
 #include "Basic2DGeometry.h"
-#include <glad/glad.h>
+#include "../GR_cross_definitions.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../graphics/Shapes.h"
 
@@ -19,6 +19,12 @@ namespace gr {
     void Basic2DGeometry::SetColor(glm::vec3 c)
     {
         this->color = c;
+    }
+    
+    void Basic2DGeometry::SetViewProjection(glm::mat4 p, glm::mat4 v)
+    {
+        this->projection = p;
+        this->view = v;
     }
 
     gr::Shader* Basic2DGeometry::GetShader()
@@ -44,6 +50,9 @@ namespace gr {
         case SQUARE:
             glBufferData(GL_ARRAY_BUFFER, sizeof(shapes2D::square), shapes2D::square, GL_STATIC_DRAW);
             break;
+        case PLANE:
+            glBufferData(GL_ARRAY_BUFFER, sizeof(shapes2D::plane), shapes2D::plane, GL_STATIC_DRAW);
+            break;
         case TRIANGLE:
             glBufferData(GL_ARRAY_BUFFER, sizeof(shapes2D::triangle), shapes2D::triangle, GL_STATIC_DRAW);
             break;
@@ -51,6 +60,9 @@ namespace gr {
 
         shader->setVertexAttrib("aPos", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, position));
         shader->setVertexAttrib("aColor", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, color));
+        if (implement3D) {
+            shader->setVertexAttrib("aNormal", 3, GL_FLOAT, sizeof(gr::Vertex), (void*)offsetof(gr::Vertex, normal));
+        }
     }
 
     void Basic2DGeometry::draw()
@@ -63,6 +75,10 @@ namespace gr {
         model = glm::scale(model, transform->size);
 
         shader->setMat4("model", model);
+        if (implement3D) {
+            shader->setMat4("projection", projection);
+            shader->setMat4("view", view);
+        }
 
         glBindVertexArray(this->VAO);
         switch (types)
@@ -70,10 +86,14 @@ namespace gr {
         case SQUARE:
             glDrawArrays(GL_TRIANGLES, 0, 6);   
             break;
+        case PLANE:
+            glDrawArrays(GL_TRIANGLES, 0, 6);   
+            break;
         case TRIANGLE:
             glDrawArrays(GL_TRIANGLES, 0, 3);
             break;
         }
+        glBindVertexArray(0);
     }
 
     void Basic2DGeometry::destroyGL()

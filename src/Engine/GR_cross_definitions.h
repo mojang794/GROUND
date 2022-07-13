@@ -7,8 +7,11 @@
 
 #ifdef _WIN32
 #include <glad/glad.h>
+#include <stb_image.h>
 #include <windows.h>
 #elif
+#include <imgui/imgui.h>
+#include <stb/stb_image.h>
 #include <GL/glew.h>
 #endif
 

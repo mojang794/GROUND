@@ -22,7 +22,9 @@ namespace gr
         void Play(const ALuint buffer_to_play);
         void SetVolume(float volume);
         void SetLoop(bool loop);
+        
         void SetPosition(float position[3]);
+        void SetPosition(float x, float y, float z);
 
     private:
         ALuint source;

@@ -6,7 +6,6 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glad/glad.h>
 #include "../GR_cross_definitions.h"
 
 bool gr::Shader::isPredefinedUsed = false;
@@ -75,26 +74,45 @@ void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
     std::ifstream fShaderFile;
     // ensure ifstream objects can throw exceptions:
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try
+    
+    try // Vertex Shader
     {
         // open files
         vShaderFile.open(vertexPath);
-        fShaderFile.open(fragmentPath);
-        std::stringstream vShaderStream, fShaderStream;
+        std::stringstream vShaderStream;
         // read file's buffer contents into streams
         vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
         // close file handlers
         vShaderFile.close();
-        fShaderFile.close();
         // convert stream into string
         vertexCode = vShaderStream.str();
+    }
+    catch (std::ifstream::failure e)
+    {
+        std::stringstream ss;
+        ss << "SHADER::FILE_ERROR COMPILATION FAILED IN FILE: " << vertexPath << std::endl << e.what();
+        gr::LogError(ss.str().c_str());
+    }
+
+    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+    try // Fragment shader
+    {
+        // open files
+        fShaderFile.open(fragmentPath);
+        std::stringstream fShaderStream;
+        // read file's buffer contents into streams
+        fShaderStream << fShaderFile.rdbuf();
+        // close file handlers
+        fShaderFile.close();
+        // convert stream into string
         fragmentCode = fShaderStream.str();
     }
     catch (std::ifstream::failure e)
     {
-        gr::LogError(GR_TO_CSTRING("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ FILE\nCOMPILE ERROR: ", e.what()));
+        std::stringstream ss;
+        ss << "SHADER::FILE_ERROR COMPILATION FAILED IN FILE: " << fragmentPath << std::endl << e.what();
+        gr::LogError(ss.str().c_str());
     }
     const char *vShaderCode = vertexCode.c_str();
     const char *fShaderCode = fragmentCode.c_str();
@@ -113,8 +131,11 @@ void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
     if (!success)
     {
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED IN FILE " << vertexPath << "\n"
+        
+        std::stringstream ss;
+        ss << "ERROR::SHADER::VERTEX::COMPILATION_FAILED IN FILE " << vertexPath << "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     };
 
     // fragment Shader
@@ -126,8 +147,10 @@ void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
     if (!success)
     {
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED IN FILE " << fragmentPath << "\n"
+        std::stringstream ss;
+        ss << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED IN FILE " << fragmentPath << "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     };
 
     // shader Program
@@ -142,8 +165,10 @@ void gr::Shader::LoadFromFile(const char *vertexPath, const char *fragmentPath)
     if (!success)
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+        std::stringstream ss;
+        ss << "ERROR::SHADER::PROGRAM::LINKING_FAILED" << "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     }
 
     // delete the shaders as they're linked into our program now and no longer necessary
@@ -170,8 +195,10 @@ void gr::Shader::LoadFromStream(const char *VertexStream, const char *FragmentSt
     if (!success)
     {
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+        std::stringstream ss;
+        ss << "ERROR::SHADER::VERTEX::STREAM::COMPILATION_FAILED" << "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     };
 
     // fragment Shader
@@ -183,8 +210,10 @@ void gr::Shader::LoadFromStream(const char *VertexStream, const char *FragmentSt
     if (!success)
     {
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
+        std::stringstream ss;
+        ss << "ERROR::SHADER::FRAGMENT::STREAM::COMPILATION_FAILED"<< "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     };
 
     // shader Program
@@ -197,8 +226,10 @@ void gr::Shader::LoadFromStream(const char *VertexStream, const char *FragmentSt
     if (!success)
     {
         glGetProgramInfoLog(ID, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+        std::stringstream ss;
+        ss << "ERROR::SHADER::PROGRAM::STREAM::LINKING_FAILED" << "\n"
                   << infoLog << std::endl;
+        gr::LogError(ss.str().c_str());
     }
 
     // delete the shaders as they're linked into our program now and no longer necessary

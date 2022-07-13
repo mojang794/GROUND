@@ -1,5 +1,4 @@
 #include "Framebuffer.h"
-#include <glad/glad.h>
 #include "Shapes.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
@@ -77,5 +76,11 @@ namespace gr
     {
         glBindTexture(GL_TEXTURE_2D, screen);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, screen, 0);
+    }
+    
+    Shader* Framebuffer::GetShader() const
+    {
+        return this->shader;
     }
 }

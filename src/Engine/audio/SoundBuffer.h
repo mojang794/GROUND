@@ -5,6 +5,8 @@
 
 namespace gr
 {
+    using SoundBuf = ALuint;
+
     class SoundBuffer
     {
     public:

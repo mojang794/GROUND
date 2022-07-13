@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <string>
 
 namespace gr
 {
@@ -13,14 +14,16 @@ namespace gr
         {
             _window = glfwCreateWindow(width, height, title, NULL, NULL);
         }
+        GR_ASSERT(_window);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.majorVersion);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.minorVersion);
         glfwWindowHint(GLFW_OPENGL_PROFILE, (settings.CoreProfile) ? GLFW_OPENGL_CORE_PROFILE : GLFW_OPENGL_ANY_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, settings.antialiasing);
+        glfwSetWindowAttrib(_window, GLFW_RESIZABLE, settings.Resizable);
         glfwMakeContextCurrent(_window);
         if (settings.Vsync)
         {
-            glfwSwapInterval(0);
+            glfwSwapInterval(1);
         }
 
         _width = width;

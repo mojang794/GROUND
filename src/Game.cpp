@@ -54,7 +54,7 @@ Game::Game(std::string title)
 	{
 		std::cout << "ERROR! something went wrong!" << std::endl
 				  << "Error: " << e.what() << std::endl;
-		ERROR_MESSAGE(glfwGetWin32Window(_data->window->GetHandle()), "GROUND", (LPCSTR)GR_TO_CSTRING("Error: ", e.what()));
+		ERROR_MESSAGE("GROUND", (LPCSTR)GR_TO_CSTRING("Error: ", e.what()));
 		return;
 	}
 }
@@ -70,9 +70,10 @@ void Game::initWindow(std::string title)
 {
 	gr::WindowSettings settings;
 
-	settings.antialiasing = _data->graphics_settings["antialiasing"];
+	settings.antialiasing = _data->graphics_settings["ANTIALIASING"];
 	settings.Vsync = _data->graphics_settings["VSYNC"];
 	settings.Fullscreen = _data->graphics_settings["FULLSCREEN"];
+	settings.Resizable = false;
 #if _WIN32
 	settings.majorVersion = 3;
 	settings.minorVersion = 3;
@@ -103,65 +104,69 @@ void Game::initImGui()
 
 void Game::run()
 {
-	// Predefined Shader
-	gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
-	float m_LastTime = 0, deltatime = 0;
-	_data->FPS = 0;
-	while (_data->window->IsOpen())
-	{
-		_data->window->PollEvents();
-
-		this->_data->machine.ProcessChanges();
-
-		// Update scene
-		float time = glfwGetTime();
-		deltatime = time - m_LastTime;
-		m_LastTime = time;
-
-		this->_data->machine.GetActiveState()->update(deltatime);
-		_data->manager.refresh();
-		_data->manager.update(deltatime);
-
-		ImGui_ImplGlfw_NewFrame();
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui::NewFrame();
-
-
-		/*----------Additional keybinds-------------*/
-		if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::F5)) {
-			debugConsole = true;
-		}
-		if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::ESCAPE)) {
-			debugConsole = false;
-		}
-		/*------------------------------------------*/
-
-		if (debugConsole)
+	try {
+		// Predefined Shader
+		gr::Shader::CompilePredefinedShader(PREDEFINED_SHADER);
+		float m_LastTime = 0, deltatime = 0;
+		_data->FPS = 0;
+		while (_data->window->IsOpen())
 		{
-			_console.Draw();
+			_data->window->PollEvents();
+
+			this->_data->machine.ProcessChanges();
+
+			// Update scene
+			float time = glfwGetTime();
+			deltatime = time - m_LastTime;
+			m_LastTime = time;
+
+			this->_data->machine.GetActiveState()->update(deltatime);
+			_data->manager.refresh();
+			_data->manager.update(deltatime);
+
+			ImGui_ImplGlfw_NewFrame();
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui::NewFrame();
+
+
+			/*----------Additional keybinds-------------*/
+			if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::F5)) {
+				debugConsole = true;
+			}
+			if (gr::Keyboard::IsKeyPressed(_data->window, gr::Keyboard::Key::ESCAPE)) {
+				debugConsole = false;
+			}
+			/*------------------------------------------*/
+
+			if (debugConsole)
+			{
+				_console.Draw();
+			}
+
+			_data->window->Clear();
+
+			// Draw scene
+			this->_data->machine.GetActiveState()->draw();
+			this->_data->manager.draw();
+			this->_data->machine.GetActiveState()->AfterDraw();
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		
+			_data->window->Display();
 		}
 
-		_data->window->Clear();
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 
-		// Draw scene
-		this->_data->machine.GetActiveState()->draw();
-		this->_data->manager.draw();
-		this->_data->machine.GetActiveState()->AfterDraw();
+		this->_data->manager.destroyGL();
+		this->_data->machine.GetActiveState()->destroyGL();
+		gr::Shader::DeletePredefinedShader();
+		gr::SoundDevice::CloseDevice();
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	
-		_data->window->Display();
+		delete _data->window;
+	} catch (std::exception& e) {
+		ERROR_MESSAGE("GROUND", (LPCSTR)GR_TO_CSTRING("Error: ", e.what()));
 	}
-
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-
-	this->_data->manager.destroyGL();
-	this->_data->machine.GetActiveState()->destroyGL();
-	gr::Shader::DeletePredefinedShader();
-	gr::SoundDevice::CloseDevice();
-
-	delete _data->window;
 }

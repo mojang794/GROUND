@@ -24,7 +24,7 @@ int main(int argc __attribute__((unused)), char** argv __attribute__((unused)))
     try {
         ::Game("GROUND");
     } catch(std::exception& e) {
-        return 1;
+        ERROR_MESSAGE("GROUND", e.what());
     }
     return 0;
 }

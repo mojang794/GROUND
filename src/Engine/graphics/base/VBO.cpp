@@ -1,5 +1,5 @@
 #include "VBO.h"
-#include <glad/glad.h>
+#include "../../GR_cross_definitions.h"
 
 gr::base::VBO::VBO(int size, const void* data)
 {

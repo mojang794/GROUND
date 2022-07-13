@@ -16,14 +16,27 @@ namespace gr
         std::ifstream _file;
         _file.open(file);
         GR_ASSERT(_file.good());
-        std::string key;
-        T value;
-        char symbol;
-        while (_file >> key >> symbol >> value)
+        if (_file.is_open()) 
         {
-            if (symbol == '=')
+            std::string line;
+            while(std::getline(_file, line)) 
             {
-                this->_keys[key] = value;
+                line.erase(std::remove_if(line.begin(), line.end(), isspace),line.end());
+                if (line[0] == '#' || line.empty()) continue;
+
+                auto delimiterPos = line.find("=");
+                auto name = line.substr(0, delimiterPos);
+                auto value = line.substr(delimiterPos + 1);
+
+                if (typeid(T) == typeid(int)) {
+                    _keys[name] = std::stoi(value);
+                } else if (typeid(T) == typeid(double)) {
+                    _keys[name] = std::stod(value);
+                } else if (typeid(T) == typeid(float)) {
+                    _keys[name] = std::stof(value);
+                } else if (typeid(T) == typeid(bool)) {
+                    _keys[name] = std::stoi(value);
+                }
             }
         }
         _file.close();

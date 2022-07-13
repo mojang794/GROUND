@@ -16,12 +16,15 @@ namespace gr {
         Shader *shader;
         Basic2DGeometryShapes types;
         glm::vec3 color;
+        glm::mat4 projection, view;
 
     public:
         Basic2DGeometry(Basic2DGeometryShapes s, std::string Fshader, std::string Vshader);
+        bool implement3D;
 
         unsigned int GetBuffer() const;
         void SetColor(glm::vec3 c);
+        void SetViewProjection(glm::mat4 p, glm::mat4 v);
 
         Shader* GetShader();
 

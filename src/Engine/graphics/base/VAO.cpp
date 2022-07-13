@@ -1,5 +1,5 @@
 #include "VAO.h"
-#include <glad/glad.h>
+#include "../../GR_cross_definitions.h"
 
 gr::base::VAO::VAO()
 {

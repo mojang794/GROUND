@@ -1,9 +1,7 @@
 #include "ModelComponent.h"
 #include "../graphics/GraphicLoader.h"
 #include "../GR_cross_definitions.h"
-#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <stb_image.h>
 
 namespace gr {
     ModelComponent::ModelComponent(const char* Modelpath, const char* Texturepath, std::string Fshader, std::string Vshader, unsigned int Tcount)

@@ -23,6 +23,8 @@ namespace gr
         void DrawStorage();
         void Resize(int width, int height);
 
+        Shader* GetShader() const;
+
     private:
         unsigned int fbo, rbo, screen;
         Shader* shader;

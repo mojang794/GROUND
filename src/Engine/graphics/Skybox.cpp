@@ -1,7 +1,7 @@
 #include "Skybox.h"
 #include "GraphicLoader.h"
 #include "Shapes.h"
-#include <glad/glad.h>
+#include "../GR_cross_definitions.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace gr

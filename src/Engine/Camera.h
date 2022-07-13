@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
+#include "GR_cross_definitions.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -42,6 +42,7 @@ namespace gr
         float MovementSpeed;
         float MouseSensitivity;
         float Zoom;
+        float velocity;
 
         // constructor with vectors
         Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = CAMERA_YAW, float pitch = CAMERA_PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(CAMERA_SPEED), MouseSensitivity(CAMERA_SENSITIVITY), Zoom(CAMERA_ZOOM)
@@ -71,7 +72,7 @@ namespace gr
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
         void ProcessKeyboard(Camera_Movement direction, float deltaTime)
         {
-            float velocity = MovementSpeed * deltaTime;
+            velocity = MovementSpeed * deltaTime;
             if (direction == FORWARD)
                 Position += Front * velocity;
             if (direction == BACKWARD)

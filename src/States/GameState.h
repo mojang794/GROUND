@@ -8,16 +8,16 @@
 #include "../Engine/graphics/Framebuffer.h"
 #include "../Engine/graphics/Text.h"
 #include "../Engine/graphics/Skybox.h"
+#include "../Engine/graphics/Billboard.h"
 
 class GameState : public gr::States
 {
 private:
 	GameDataRef _data;
-	gr::Entity* test;
 	Player* player;
-	gr::Entity* e, *h, *playerModel;
-	gr::Framebuffer* b;
+	gr::Framebuffer* frame;
 	gr::Text* _t;
+	gr::Entity* e, *plane;
 	gr::SkyBox* sky;
 
 public:

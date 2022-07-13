@@ -27,5 +27,15 @@ namespace gr
         {
             return std::max(_min, std::min(_max, _value));
         }
+
+        template<typename T>
+        static T Random(T min, T max)
+        {
+            assert(max > min); 
+            T random = ((T) rand()) / (T) RAND_MAX;
+
+            T range = max - min;
+            return (random*range) + min;
+        }
     };
 }

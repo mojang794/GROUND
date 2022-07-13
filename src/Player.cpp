@@ -1,69 +1,73 @@
 #include "Player.h"
-#include "Engine/Components.h"
 #include "Definitions.h"
 #include "Engine/window/Keyboard.h"
 #include "Engine/window/Mouse.h"
+#include "Engine/system/Collision.h"
+#include "Engine/audio/Listener.h"
 
-Player::Player(gr::ConfigFile<int>& keys, gr::Manager *m)
+Player::Player(gr::Manager& m, gr::ConfigFile<int> keys)
 {
     _keys.copy(keys);
-    this->ui = &m->addEntity();
 }
 
 Player::~Player()
 {
-    delete this->camera;
-    delete this->ui;
-    delete this->p_transform;
+
 }
 
-void Player::init()
+void Player::Init()
 {
     camera = new gr::Camera(glm::vec3(0, 0, 3.f));
     this->lightColor = glm::vec3(1.0);
-    this->_objectColor = glm::vec3(1.0f, 0.0f, 0.0f);
-
-    this->ui->addComponent<gr::TransformComponent>(0.0f, -0.9f, 0.0f, glm::vec3(0.1f));
-    this->ui->addComponent<gr::Basic2DGeometry>(gr::Basic2DGeometryShapes::SQUARE, GetShadingPath("PlayerUI.frag"), GetShadingPath("PlayerUI.vert"));
-    this->ui->getComponent<gr::Basic2DGeometry>().SetColor(_objectColor);
-    p_transform = new gr::TransformComponent(camera->Position.x, camera->Position.y, camera->Position.z, glm::vec3(0.5, 1.0, 0.5));
 }
 
-void Player::update(float deltaTime, gr::Window* window)
+void Player::Update(float deltaTime, gr::Window* window)
 {
-    p_transform->position = camera->Position;
-
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["A"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["MOVE_LEFT"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::LEFT, 5 * deltaTime);
     }
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["D"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["MOVE_RIGHT"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::RIGHT, 5 * deltaTime);
     }
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["W"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["MOVE_UP"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::FORWARD, 5 * deltaTime);
     }
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["S"])) {
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["MOVE_DOWN"])) {
         this->camera->ProcessKeyboard(gr::Camera_Movement::BACKWARD, 5 * deltaTime);
     }
 
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LEFT_ARROW"])) {
-        this->camera->ProcessMouseMovement(-0.5, 0);
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LOOK_LEFT"])) {
+        this->camera->ProcessMouseMovement(-0.5 * _keys["SENSITIVITY"] * 5, 0);
     }
-    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["RIGHT_ARROW"])) {
-        this->camera->ProcessMouseMovement(0.5, 0);
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LOOK_RIGHT"])) {
+        this->camera->ProcessMouseMovement(0.5 * _keys["SENSITIVITY"] * 5, 0);
+    }
+#if !defined(_RELEASE)
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LOOK_UP"])) {
+        this->camera->ProcessMouseMovement(0, 0.5 * _keys["SENSITIVITY"] * 5);
+    }
+    if (gr::Keyboard::IsKeyPressed(window, (gr::Keyboard::Key)this->_keys["LOOK_DOWN"])) {
+        this->camera->ProcessMouseMovement(0, -0.5 * _keys["SENSITIVITY"] * 5);
+    }
+#endif
+
+    gr::Listener::SetPosition(
+        this->camera->Position.x,
+        this->camera->Position.y,
+        this->camera->Position.z
+    );
+}
+
+void Player::OnCollision(gr::Entity* e)
+{
+    if (gr::Collision::AABB(GetTransform(), e)) {
+        camera->velocity = 0;
     }
 }
 
-void Player::UpdateDraw()
+glm::mat4 Player::GetProjection(float w, float y) const
 {
-    this->ui->getComponent<gr::Basic2DGeometry>().SetColor(_objectColor);
-}
-
-glm::mat4 Player::GetProjection(float w, float h) const
-{
-    return glm::perspective(
-        glm::radians(camera->Zoom),
-        (float)w / (float)h, 0.1f, 100.0f);
+    return glm::perspective(glm::radians(45.f), w / y, 0.1f, 1000.f);
 }
 
 glm::mat4 Player::GetView() const
@@ -71,12 +75,12 @@ glm::mat4 Player::GetView() const
     return camera->GetViewMatrix();
 }
 
-glm::vec3 Player::GetFront() const
+gr::Camera* Player::GetCamera() const
 {
-    return camera->Front;
+    return camera;
 }
 
-gr::TransformComponent *Player::GetTransform() const
+gr::TransformComponent* Player::GetTransform() const
 {
-    return p_transform;
+    return new gr::TransformComponent(camera->Position.x, camera->Position.y, camera->Position.z, glm::vec3(0.5, 0.5, 0.5));
 }

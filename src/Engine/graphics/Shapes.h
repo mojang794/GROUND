@@ -76,13 +76,22 @@ namespace gr {
 
     namespace shapes2D {
         static Vertex square[] = {
-            glm::vec3(-0.5f, -0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 0.0f), glm::vec3(),
-            glm::vec3( 0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 0.0f), glm::vec3(),
-            glm::vec3(-0.5f,  0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f).getColor3V(), glm::vec2(0.0f, 1.0f), glm::vec3(),
+            glm::vec3(-0.5f, -0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 0.0f), glm::vec3(0, 0, -1),
+            glm::vec3( 0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 0.0f), glm::vec3(0, 0, -1),
+            glm::vec3(-0.5f,  0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f).getColor3V(), glm::vec2(0.0f, 1.0f), glm::vec3(0, 0, -1),
 
-            glm::vec3(-0.5f,  0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 1.0f), glm::vec3(),
-            glm::vec3( 0.5f,  0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 1.0f), glm::vec3(),
-            glm::vec3( 0.5f, -0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f).getColor3V(), glm::vec2(1.0f, 0.0f), glm::vec3(),
+            glm::vec3(-0.5f,  0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 1.0f), glm::vec3(0, 0, -1),
+            glm::vec3( 0.5f,  0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 1.0f), glm::vec3(0, 0, -1),
+            glm::vec3( 0.5f, -0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f).getColor3V(), glm::vec2(1.0f, 0.0f), glm::vec3(0, 0, -1),
+        };
+
+        static Vertex plane[] = {
+            glm::vec3(-0.5f, 0.0f, -0.5f),  Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f),
+            glm::vec3( 0.5f, 0.0f, -0.5f),  Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f),
+            glm::vec3( 0.5f, 0.0f,  0.5f),  Color(1.0f, 0.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, -1.0f,  0.0f),
+            glm::vec3( 0.5f, 0.0f,  0.5f),  Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, -1.0f,  0.0f),
+            glm::vec3(-0.5f, 0.0f,  0.5f),  Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, -1.0f,  0.0f),
+            glm::vec3(-0.5f, 0.0f, -0.5f),  Color(0.0f, 1.0f, 0.0f).getColor3V(), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f),
         };
 
         static Vertex triangle[] = {

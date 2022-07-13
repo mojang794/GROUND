@@ -1,7 +1,6 @@
 #include "Texture.h"
-#include <glad/glad.h>
+#include "../../GR_cross_definitions.h"
 #include <iostream>
-#include <stb_image.h>
 
 gr::base::Texture::Texture()
 {

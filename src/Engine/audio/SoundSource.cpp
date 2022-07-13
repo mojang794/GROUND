@@ -42,4 +42,9 @@ namespace gr
     {
         alSource3f(source, AL_POSITION, position[0], position[1], position[2]);
     }
+    
+    void SoundSource::SetPosition(float x, float y, float z)
+    {
+        alSource3f(source, AL_POSITION, x, y, z);
+    }
 }

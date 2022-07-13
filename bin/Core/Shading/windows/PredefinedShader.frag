@@ -5,6 +5,44 @@ precision mediump float;
 #ifndef PREDEFINED_SHADER
 #define PREDEFINED_SHADER
 
+vec2 PixelateFrame(vec2 UV, float noise)
+{
+    vec2 p = UV.st;
+    p.x -= mod(p.x, 1.0 / noise);
+    p.y -= mod(p.y, 1.0 / noise);
+
+    return p;
+}
+
+vec3 StaticTVNoise(vec2 texcoords, float _clock) {
+
+    vec2 uv = texcoords.st;
+    
+    float t = _clock +123.; // tweak the start moment
+    float ta = t*.654321;
+    float tb = t*(ta*.123456);
+    
+    float c = fract(sin(uv.x*ta+uv.y*tb)*5678.);
+    vec3 col = vec3(c);
+
+    return col;
+}
+
+vec4 TVScreenEffect(vec2 texcoords, sampler2D texture)
+{
+    vec2 uv = texcoords.xy;
+    uv = uv * 2.0-1.0;
+    vec2 offset = abs(uv.yx) / vec2(3, 3);
+    uv = uv + uv * offset * offset;
+    uv = uv * 0.5 + 0.5;	
+    vec4 baseColor = texture2D(texture, uv);
+    if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0){
+        return vec4(0.0, 0.0, 0.0, 1.0);
+    } else {
+        return baseColor;
+    }
+}
+
 vec3 DrawPointLight(vec3 vNormal, vec3 lightPos, vec3 lightColor, vec3 viewPos, vec3 FragPos, float ambientStrength, float specularStrength, float impactValue) {
     const float constant = 1.0;
     const float linear = 0.09;

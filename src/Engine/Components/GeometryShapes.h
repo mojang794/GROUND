@@ -19,6 +19,7 @@ namespace gr
     enum Basic2DGeometryShapes
     {
         TRIANGLE,
-        SQUARE
+        SQUARE,
+        PLANE
     };
 }

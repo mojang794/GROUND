@@ -9,7 +9,7 @@ LIB		:= lib
 ifeq ($(OS),Windows_NT)
 	LIBRARIES	:= -Wl,--subsystem,windows -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lfreetype -lglfw3 -lopenal32 -lopengl32 -luser32 -lkernel32 -lgdi32
 else
-	LIBRARIES	:= -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lfreetype -lglfw3 -lopenal32 -lGL -lGLEW
+	LIBRARIES	:= -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lfreetype -limgui -lstb -lglfw -lopenal -lGL -lGLEW
 endif
 
 EXECUTABLE_R	:= GROUND_release.exe

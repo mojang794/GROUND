@@ -3,6 +3,7 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include "../GR_cross_definitions.h"
 

@@ -4,12 +4,12 @@
 #include <GLFW/glfw3.h>
 
 namespace gr
-{
+{   
     struct WindowSettings
     {
         short antialiasing;
         short majorVersion, minorVersion;
-        bool CoreProfile, Vsync, Fullscreen;
+        bool CoreProfile, Vsync, Fullscreen, Resizable;
     };
 
     class Window
